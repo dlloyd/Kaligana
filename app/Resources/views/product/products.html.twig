@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<div class="container">
+  <h3> liste des produits  </h3>
+
+  
+
+  <br/><br/>
+
+  <input id="myInput" type="text" name="search" />
+           
+  <table class="table table-striped">
+    <thead>
+      <tr>
+      	<th> Nom </th>
+        <th> Categorie </th>
+        <th> Prix </th>
+        <th>  Image(s) </th>
+        <th> Mettre à jour </th>
+        <th>Supprimer</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+    {% for product in products %}
+      <tr>
+        <td class="name"> {{ product.name }} </td>
+        <td> {{ product.productType.name }} </td>
+        <td> {{ product.priceUnit }} </td>
+        <td> <a href=" {{ path('add_product_image',{'id': product.id }) }} "> ici</a> </td>
+        <td > <a href=" {{ path('update_product',{'id': product.id }) }} " > ici</a> </td>
+        <td > <a href=" {{ path('delete_product',{'id': product.id}) }} " onclick="validate(event)"> ici</a> </td>
+        
+      </tr>
+    {% endfor %}
+      
+    </tbody>
+  </table>
+</div>
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function(){
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").each(function(){
+     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+    
+  });
+</script>
+
+<script type="text/javascript">
+  
+  function validate(e){
+      if(!confirm("Attention êtes-vous sur de vouloir supprimer ce produit?")){
+        e.preventDefault();
+      }
+  }
+</script>
+
+{% endblock %}
+
+
+{% endblock %}

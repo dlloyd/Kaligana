@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="items">
+	{{ type.name }}
+{% for product in type.products %}
+	<div>
+		{% if product.imgStarName != null %}
+		<img src="{{ asset('images_products/'~product.imgStarName) | imagine_filter('my_thumb') }}" alt="" />
+		{% endif %}
+
+		{{ product.name }}
+		{{ product.description }}
+		{{ product.priceUnit }}
+		<a href="{{ path('get_product',{'id':product.id }) }}"> Détails </a>
+	</div>
+
+
+{% endfor %}
+</div>
+
+
+{% endblock %}
+
+

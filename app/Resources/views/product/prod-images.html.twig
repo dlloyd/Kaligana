@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="item-imgs">
+	{% for img in product.images %}
+		<div> <img src="{{ asset('images_products/'~img.name) | imagine_filter('my_thumb') }}">
+			{% if img.isStar != true %}
+			<a href="{{ path('change_product_image_star',{'imgId':img.id}) }} "> Rendre vedette </a>
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+ <h3> {{ product.productType.name }} </h3>
+<div class="item">
+	{{ product.name }} <br/>
+	<p>{{ product.description }} </p>
+	{{ product.priceUnit }} euro(s)<br/>
+	<a href="{{ path('update_product',{'id':product.id }) }}"> Mettre à jour </a> <br/>
+</div>
+
+<h3>Ajouter une image</h3>
+{{ form_start(form, {'method': 'post', 'action': path('add_product_image',{'id':product.id}) }) }}
+
+                
+    {{ form_rest(form) }}
+    
+{{ form_end(form) }}
+
+
+
+{% endblock %}

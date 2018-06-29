@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+{% if product.images is not empty %}
+<div class="item-imgs" style="width: 50%;margin-left:10%">
+	{% for img in product.images %}
+		<div align="center" > <img src="{{ asset('images_products/'~img.name) }}"> </div>
+		
+	{% endfor %}
+</div>
+{% endif %}
+ 
+<div class="item">
+	{{ product.name }}
+	{{ product.description }}
+	{{ product.priceUnit }} euro(s)
+
+	<h4>Réservation</h4>
+	{{ render(controller('AppBundle:Reservation:create',{ 'productId': product.id } )) }}
+
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+<script type="text/javascript">
+
+	$(document).ready(function() {
+	$("#form_dateUnique").flatpickr({
+		locale: "fr",
+		minDate: "today"
+	});
+
+	$("#form_dateRange").flatpickr({
+		locale: "fr",
+		minDate: "today",
+		disable: ["2018-07-05",{ from: "2018-08-05" , to: "2018-08-20" } ],
+		mode: "range",
+	});
+
+	$('#form_manyDays').click(function(){
+		$("#form_dateUnique").toggle();
+		$("#form_dateRange").toggle();
+	})
+
+	$('.item-imgs').slick({
+	  	  dots: true,
+		  infinite: true,
+		  speed: 500,
+		  fade: true,
+		  cssEase: 'linear'
+	    
+	  });
+	});		
+</script>
+{% endblock %}
+
+
+

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{{ form_start(form, {'method': 'post', 'action': path('update_product',{'id':product.id}) }) }}
+
+                
+    {{ form_rest(form) }}
+    
+{{ form_end(form) }}
+
+{% endblock %}
