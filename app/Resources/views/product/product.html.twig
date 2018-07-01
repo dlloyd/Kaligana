@@ -37,6 +37,7 @@
 	$("#form_dateUnique").flatpickr({
 		locale: "fr",
 		minDate: "today",
+		disable: [ {% for resa in product.reservations %} { from: resa.dateBegin , to: resa.dateEnd  }, {% endfor %}],
 		onChange: function(selectedDates, dateStr, instance) {
 	        $("#form_quantity").val(1);
 	        $("#form_dateBegin").val(dateStr);
@@ -47,7 +48,7 @@
 	$("#form_dateRange").flatpickr({
 		locale: "fr",
 		minDate: "today",
-		disable: [{ from: "2018-08-05" , to: "2018-08-20" },{ from: "2018-07-05" , to: "2018-07-05" } ],
+		disable: [ {% for resa in product.reservations %} { from: resa.dateBegin , to: resa.dateEnd  }, {% endfor %}] ,
 		mode: "range",
 		onChange: function(selectedDates, dateStr, instance) {
 			if(Object.keys(selectedDates).length==2){
