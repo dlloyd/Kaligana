@@ -45,6 +45,21 @@ class ReservationController extends Controller
                     'readonly' => true,
                     'hidden' => true,
             ),))
+            ->add('dateBegin', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('dateEnd', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('quantity', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
             ->add('save', SubmitType::class, array('label' => 'Réserver'))
             ->getForm();
     	}
