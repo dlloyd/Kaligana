@@ -6,6 +6,7 @@
 	{{ type.name }}
 {% for product in type.products %}
 	<div>
+		{% if product.isHidden == false %}
 		{% if product.imgStarName != null %}
 		<img src="{{ asset('images_products/'~product.imgStarName) | imagine_filter('my_thumb') }}" alt="" />
 		{% endif %}
@@ -14,6 +15,7 @@
 		{{ product.description }}
 		{{ product.priceUnit }}
 		<a href="{{ path('get_product',{'id':product.id }) }}"> Détails </a>
+		{% endif %}
 	</div>
 
 

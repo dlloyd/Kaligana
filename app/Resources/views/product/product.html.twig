@@ -2,6 +2,7 @@
 
 {% block body %}
 
+
 <div class="container">
 {% if product.images is not empty %}
 <div class="item-imgs" style="width: 50%;margin-left:10%">
@@ -37,7 +38,7 @@
 	$("#form_dateUnique").flatpickr({
 		locale: "fr",
 		minDate: "today",
-		disable: [ {% for resa in product.reservations %} { from: resa.dateBegin , to: resa.dateEnd  }, {% endfor %}],
+		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		onChange: function(selectedDates, dateStr, instance) {
 	        $("#form_quantity").val(1);
 	        $("#form_dateBegin").val(dateStr);
@@ -48,21 +49,21 @@
 	$("#form_dateRange").flatpickr({
 		locale: "fr",
 		minDate: "today",
-		disable: [ {% for resa in product.reservations %} { from: resa.dateBegin , to: resa.dateEnd  }, {% endfor %}] ,
+		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		mode: "range",
 		onChange: function(selectedDates, dateStr, instance) {
 			if(Object.keys(selectedDates).length==2){
 
 		        var dates = dateStr.split(/(au|to)/g); // return dateB, au/to , dateE
 		        var timeDiff = Math.abs(new Date(dates[2]).getTime() - new Date(dates[0]).getTime());
-		        console.log(dates);
+		        
 		        var diffDays = Math.round(timeDiff / (1000 * 3600 * 24))+1; 
 		        var price = {{ product.priceUnit }};
 		        var total = parseFloat(diffDays * price).toFixed(2); 
 		        $("#amount").text(diffDays+'x'+ parseFloat(price).toFixed(2) + ':'+ total);
 		        $("#form_quantity").val(diffDays);
 		        $("#form_dateBegin").val(dates[0]);
-		        $("#form_dateEnd").val(dates[1]);
+		        $("#form_dateEnd").val(dates[2]);
 				
 		}
          
@@ -84,7 +85,10 @@
 	  });
 	});		
 </script>
+
+
 {% endblock %}
+
 
 
 

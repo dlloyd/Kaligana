@@ -69,7 +69,7 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="img_star_name", type="string", length=255)
+     * @ORM\Column(name="img_star_name", type="string", length=255,nullable=true)
      */
     private $imgStarName;  //Permet de ne pas charger toutes les images pour afficher la vedette
 
@@ -77,7 +77,14 @@ class Product
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reservation", mappedBy="product")
     */
-    private $reservations;  
+    private $reservations;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_hidden", type="boolean")
+     */
+    private $is_hidden;  
 
 
     /**
@@ -334,5 +341,29 @@ class Product
     public function getDurationNumber()
     {
         return $this->durationNumber;
+    }
+
+    /**
+     * Set isHidden
+     *
+     * @param boolean $isHidden
+     *
+     * @return Product
+     */
+    public function setIsHidden($isHidden)
+    {
+        $this->is_hidden = $isHidden;
+
+        return $this;
+    }
+
+    /**
+     * Get isHidden
+     *
+     * @return boolean
+     */
+    public function getIsHidden()
+    {
+        return $this->is_hidden;
     }
 }

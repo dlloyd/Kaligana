@@ -21,78 +21,63 @@ class ReservationController extends Controller
     public function createAction(Request $req,$productId){
 
     	$em = $this->getDoctrine()->getManager();
+        $resa = array();
     	$prod = $em->getRepository('AppBundle:Product')->find($productId);
-    	$resa = array();
+
+        if(!$prod || !$prod->getIsHidden()){
 
     	if($prod->getProductType()->getName()=="Activity"){
-    		$form = $this->createFormBuilder($resa)
-            ->add('quantity', IntegerType::class)
-            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
-            ->getForm();
+    		$form = $this->activityForm($resa);
     	}
     	else{
-    		$form = $this->createFormBuilder($resa)
-            ->add('manyDays', CheckboxType::class, array(
-                    'label'    => 'Plusieurs jours ?',
-                    'required' => false,
-            ))
-            ->add('dateUnique', TextType::class,array(
-                    'attr' => array(
-                    'readonly' => true,
-            ),))
-            ->add('dateRange', TextType::class,array(
-                    'attr' => array(
-                    'readonly' => true,
-                    'hidden' => true,
-            ),))
-            ->add('dateBegin', HiddenType::class,array(
-                    'attr' => array(
-                    'readonly' => true,
-                    'hidden' => true,
-            ),))
-            ->add('dateEnd', HiddenType::class,array(
-                    'attr' => array(
-                    'readonly' => true,
-                    'hidden' => true,
-            ),))
-            ->add('quantity', HiddenType::class,array(
-                    'attr' => array(
-                    'readonly' => true,
-                    'hidden' => true,
-            ),))
-            ->add('save', SubmitType::class, array('label' => 'Réserver'))
-            ->getForm();
+    		$form = $this->carLodgmentForm($resa);
     	}
 
     	$form->HandleRequest($req);
         if($form->isSubmitted() && $form->isValid()){
     		//add reservation to session
-    		$session = $this->getRequest()->getSession();
+    		$session = $req->getSession();
     		if($session->has('reservation')){
     			$session->remove('reservation');
     		}
     		$session->set('reservation',$form->getData());
 
-    		return $this->redirectToRoute('validate_payment_reservation');
+    		return $this->redirectToRoute('validate_payment_reservation',array('productId'=> $productId,));
            
         }
 
     	return $this->render('reservation/create.html.twig',array('form' => $form->createView(),'id'=>$productId));
-
+        }
+        else{
+            return $this->render('reservation/create.html.twig',array('error'=>"Produit supprimé ou inexistant"));
+        }
     }
 
 
     /**
-     * @Route("/reservation/validation", name="validate_payment_reservation")
+     * @Route("/reservation/validation/{productId}",requirements={"productId" = "\d+"}, name="validate_payment_reservation")
      */
-    public function validatePaymentReservationAction(Request $req){
-    	//if !session->has('reservation') redirect to homepage 
-    	//validate amount reservation and quantity from session with productId
+    public function validatePaymentReservationAction(Request $req,$productId){
+    	
     	//if payment accepted create reservation and send mail with all informations
     	//remove reservation from session
     	//redirect to bill page
     	//else redirect to payment page with error payment
-    	return null;
+        $em = $this->getDoctrine()->getManager();
+        $prod = $em->getRepository('AppBundle:Product')->find($productId);
+        $session = $req->getSession();
+        $em = $this->getDoctrine()->getManager();
+        if(!$session->has('reservation')){
+            return $this->redirectToRoute('homepage');
+        }
+        $resa = $this->createNewReservation($session->get('reservation'),$prod);
+        $em->persist($resa);
+        $em->flush();
+
+        $amount = $resa->getQuantity()* $resa->getProduct()->getPriceUnit();
+
+        $req->getSession()->getFlashBag()->add('notice','réservation validée: '.$resa->getId().', montant: '. $amount );
+    	return $this->redirectToRoute('homepage');
     }
 
     /**
@@ -122,6 +107,62 @@ class ReservationController extends Controller
 
     public function generateCode($reservation){  //génère code de réservation unique 
     	return null;
+    }
+
+    public function activityForm($resa){
+        return $this->createFormBuilder($resa)
+            ->add('quantity', IntegerType::class)
+            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
+            ->getForm();
+    }
+
+    public function carLodgmentForm($resa){
+        return $this->createFormBuilder($resa)
+            ->add('manyDays', CheckboxType::class, array(
+                    'label'    => 'Plusieurs jours ?',
+                    'required' => false,
+            ))
+            ->add('dateUnique', TextType::class,array(
+                    'required' => false,
+                    'attr' => array(
+                    'readonly' => true,
+            ),))
+            ->add('dateRange', TextType::class,array(
+                    'required' => false,
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('dateBegin', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('dateEnd', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('quantity', HiddenType::class,array(
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
+            ->add('save', SubmitType::class, array('label' => 'Réserver'))
+            ->getForm();
+
+    }
+
+
+    public function createNewReservation($resaSession,$product){
+        $resa = new Reservation();
+        $resa->setProduct($product);
+        $resa->setDateBegin(new \Datetime($resaSession['dateBegin']));
+        $resa->setDateEnd(new \Datetime($resaSession['dateEnd']));
+        $resa->setQuantity($resaSession['quantity']);
+        $resa->setCode("fakecodetest");
+
+        return $resa;
     }
 
     

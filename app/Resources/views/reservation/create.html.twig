@@ -1,5 +1,5 @@
 
-
+{% if error is not defined  %}
 {% if not form.vars.valid %}
 <ul>
     
@@ -20,6 +20,11 @@
 	</div>
     
 {{ form_end(form) }}
+
+
+{% else %}
+	<h1>{{ error }}</h1>
+{% endif %}
 
 
 

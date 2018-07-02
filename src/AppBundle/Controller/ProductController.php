@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -38,6 +39,10 @@ class ProductController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$prod = $em->getRepository('AppBundle:Product')->find($id);
 
+    	if(!$prod || $prod->getIsHidden()){
+    		throw new NotFoundHttpException("Page not found");
+    	}
+
         return $this->render('product/product.html.twig',array('product'=>$prod,));
     }
 
@@ -67,6 +72,7 @@ class ProductController extends Controller
     	$form->HandleRequest($req);
     	if($form->isSubmitted() && $form->isValid()){
            $em = $this->getDoctrine()->getManager();
+           $prod->setIsHidden(false);
            $em->persist($prod);
            $em->flush();
            $req->getSession()->getFlashBag()->add('notice','Produit ajouté');
@@ -183,11 +189,12 @@ class ProductController extends Controller
 
 
     	if($img){
-    		$prodId = $img->getProduct()->getId();
-    		$em->remove($img);
+    		$prod = $img->getProduct();
+    		$prod->removeImage($img);
+    		$em->merge($prod);
     		$em->flush();
     		$request->getSession()->getFlashBag()->add('notice','Image supprimée');
-    		return $this->redirectToRoute('add_product_image',array('id'=>$prodId,));
+    		return $this->redirectToRoute('add_product_image',array('id'=>$prod->getId(),));
     	}
     	return $this->redirectToRoute('show_all_products');
 
@@ -213,7 +220,8 @@ class ProductController extends Controller
     	$prod = $em->getRepository('AppBundle:Product')->find($id);
 
     	if($prod){
-    		$em->remove($prod);
+    		$prod->setIsHidden(true);
+    		$em->merge($prod);
     		$em->flush();
     		$req->getSession()->getFlashBag()->add('notice','Produit supprimé');
 

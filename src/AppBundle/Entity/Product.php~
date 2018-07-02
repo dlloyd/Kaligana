@@ -77,7 +77,14 @@ class Product
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reservation", mappedBy="product")
     */
-    private $reservations;  
+    private $reservations;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_hidden", type="boolean")
+     */
+    private $is_hidden;  
 
 
     /**
@@ -310,5 +317,29 @@ class Product
     public function getPriceUnit()
     {
         return $this->priceUnit;
+    }
+
+    /**
+     * Set durationNumber
+     *
+     * @param integer $durationNumber
+     *
+     * @return Product
+     */
+    public function setDurationNumber($durationNumber)
+    {
+        $this->durationNumber = $durationNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get durationNumber
+     *
+     * @return integer
+     */
+    public function getDurationNumber()
+    {
+        return $this->durationNumber;
     }
 }

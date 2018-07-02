@@ -25,6 +25,7 @@
     </thead>
     <tbody id="myTable">
     {% for product in products %}
+    {% if product.isHidden == false %}
       <tr>
         <td class="name"> {{ product.name }} </td>
         <td> {{ product.productType.name }} </td>
@@ -34,6 +35,7 @@
         <td > <a href=" {{ path('delete_product',{'id': product.id}) }} " onclick="validate(event)"> ici</a> </td>
         
       </tr>
+      {% endif %}
     {% endfor %}
       
     </tbody>
