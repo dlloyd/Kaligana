@@ -43,6 +43,8 @@
 	        $("#form_quantity").val(1);
 	        $("#form_dateBegin").val(dateStr);
 	        $("#form_dateEnd").val(dateStr);
+	        $("#amount").text(1+'x'+ parseFloat({{ product.priceUnit }}).toFixed(2) + ':'+ {{ product.priceUnit }});
+	        $("#form_save").prop('disabled', false);
 		}
 	});
 
@@ -64,6 +66,7 @@
 		        $("#form_quantity").val(diffDays);
 		        $("#form_dateBegin").val(dates[0]);
 		        $("#form_dateEnd").val(dates[2]);
+		        $("#form_save").prop('disabled', false);
 				
 		}
          
@@ -71,9 +74,23 @@
 	});
 
 	$('#form_manyDays').click(function(){
-		$("#form_dateUnique").toggle();
-		$("#form_dateRange").toggle();
-	})
+		if($(this).is(':checked')){
+			$("#form_dateUnique").hide();
+			$("#form_dateUnique").val('');
+			$("#form_dateRange").show();
+		}
+		else{
+			$("#form_dateUnique").show();
+			$("#form_dateRange").hide();
+			$("#form_dateRange").val('');
+		}
+			$("#form_quantity").val(1);
+	        $("#form_dateBegin").val('');
+	        $("#form_dateEnd").val('');
+	        $("#amount").text(1+'x'+ parseFloat({{ product.priceUnit }}).toFixed(2) + ':'+ {{ product.priceUnit }});
+	        $("#form_save").prop('disabled', true);
+		
+	});
 
 	$('.item-imgs').slick({
 	  	  dots: true,

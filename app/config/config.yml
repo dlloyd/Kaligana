@@ -74,7 +74,7 @@ vich_uploader:
     mappings:
         image_product:
             uri_prefix:         /images_products
-            upload_destination: %kernel.root_dir%/../web/images_products
+            upload_destination: '%kernel.root_dir%/../web/images_products'
             namer: 
                 service: vich_uploader.namer_uniqid
 

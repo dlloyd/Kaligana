@@ -9,7 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Reservation;
 
 
@@ -54,9 +56,7 @@ class ReservationController extends Controller
     }
 
 
-    /**
-     * @Route("/reservation/validation/{productId}",requirements={"productId" = "\d+"}, name="validate_payment_reservation")
-     */
+    /*
     public function validatePaymentReservationAction(Request $req,$productId){
     	
     	//if payment accepted create reservation and send mail with all informations
@@ -66,7 +66,7 @@ class ReservationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $prod = $em->getRepository('AppBundle:Product')->find($productId);
         $session = $req->getSession();
-        $em = $this->getDoctrine()->getManager();
+        
         if(!$session->has('reservation')){
             return $this->redirectToRoute('homepage');
         }
@@ -76,8 +76,63 @@ class ReservationController extends Controller
 
         $amount = $resa->getQuantity()* $resa->getProduct()->getPriceUnit();
 
-        $req->getSession()->getFlashBag()->add('notice','réservation validée: '.$resa->getId().', montant: '. $amount );
-    	return $this->redirectToRoute('homepage');
+        return $this->render('payment/success.html.twig',array('reservation'=>$resa,'amount'=>$amount,));
+
+    }*/
+
+    /**
+     * @Route("/reservation/validation/{productId}",requirements={"productId" = "\d+"}, name="validate_payment_reservation")
+     */
+    public function paymentAction(Request $req,$productId){
+        $em = $this->getDoctrine()->getManager();
+        $prod = $em->getRepository('AppBundle:Product')->find($productId);
+        $session = $req->getSession();
+        
+        if(!$session->has('reservation')){
+            return $this->redirectToRoute('homepage');
+        }
+        else{
+          $resaSession = $session->get('reservation');
+          $amount = $resaSession['quantity']*$prod->getPriceUnit();  
+          $form = $this->paymentForm();
+         
+          if ($req->isMethod('POST')) {
+            $form->handleRequest($req);
+         
+            if ($form->isSubmitted() && $form->isValid() ) {
+              try{
+                \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+                $username = $form->get('firstname')->getData()." ".$form->get('lastname')->getData();
+                $charge = \Stripe\Charge::create(array(
+                  'customer' => $username,
+                  'amount'   => $amount*100,
+                  'currency' => 'eur',
+                  'source' => $form->get('token')->getData(),
+                  'receipt_email' => $form->get('email')->getData()
+                ));
+
+                $resa = $this->createNewReservation($resaSession,$prod);
+                $em->persist($resa);
+                $em->flush();
+
+                //Envoyer email avec infos
+
+                $session->remove('reservation');
+                return $this->render('payment/success.html.twig',array('reservation'=>$resa,'amount'=>$amount,));
+
+              }
+              catch(\Stripe\Error\Base $e){
+                $this->addFlash('warning', sprintf('Unable to take payment, %s', $e instanceof \Stripe\Error\Card ? lcfirst($e->getMessage()) : 'please try again.'));
+              }
+            }
+          }
+         
+        return $this->render('payment/validation.html.twig', [
+          'form' => $form->createView(),
+          'stripe_public_key' => $this->getParameter('stripe_public_key'),
+          'amount' => $amount,
+        ]);
+        }
     }
 
     /**
@@ -148,7 +203,7 @@ class ReservationController extends Controller
                     'readonly' => true,
                     'hidden' => true,
             ),))
-            ->add('save', SubmitType::class, array('label' => 'Réserver'))
+            ->add('save', SubmitType::class, array('disabled'=>true,'label' => 'Réserver'))
             ->getForm();
 
     }
@@ -161,8 +216,39 @@ class ReservationController extends Controller
         $resa->setDateEnd(new \Datetime($resaSession['dateEnd']));
         $resa->setQuantity($resaSession['quantity']);
         $resa->setCode("fakecodetest");
+        $resa->setCustomerFirstName($resaSession['firstname']);
+        $resa->setCustomerLastName($resaSession['lastname']);
 
         return $resa;
+    }
+
+    public function paymentForm(){
+        return $this->get('form.factory')
+          ->createNamedBuilder('payment-form')
+          ->add('firstname',TextType::class)
+          ->add('lastname',TextType::class)
+          ->add('email',EmailType::class)
+          ->add('token', HiddenType::class, [
+            'constraints' => [new Assert\NotBlank()],
+          ])
+          ->add('submit', SubmitType::class)
+          ->getForm();
+    }
+
+
+    public function sendMailConfirmationReservation($reservation){
+        $message = (new \Swift_Message('Confirmation réservation'))
+        ->setFrom('kaligana@mail.com')
+        ->setTo($email)
+        ->setBody(
+            $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                'payment/email_validation.html.twig',
+                array('reservation' => $reservation)
+            ),
+            'text/html'
+        );
+        $this->get('mailer')->send($message);
     }
 
     
