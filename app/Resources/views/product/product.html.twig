@@ -36,7 +36,9 @@
 
 	$(document).ready(function() {
 	$("#form_dateUnique").flatpickr({
-		locale: "fr",
+		{% if  app.request.locale != 'en' %}
+		locale: 'fr',
+		{% endif %}
 		minDate: "today",
 		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		onChange: function(selectedDates, dateStr, instance) {
@@ -49,7 +51,9 @@
 	});
 
 	$("#form_dateRange").flatpickr({
-		locale: "fr",
+		{% if  app.request.locale != 'en' %}
+		locale: 'fr',
+		{% endif %}
 		minDate: "today",
 		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		mode: "range",

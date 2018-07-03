@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %} {{ 'Bienvenue' | trans }} ! {% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -39,12 +39,15 @@
 
         {% block menu %} 
             <ul>
+                {% if is_granted('ROLE_ADMIN') %}
                 <li> <a href="{{ path('add_product') }}">ajouter produit</a> </li>
-                <li> <a href="{{ path('show_all_products') }}">liste des produits</a></li>
-                <li><a href="{{ path('products_by_type',{'code':'CAR'}) }}">voitures</a></li>
-                <li><a href="{{ path('products_by_type',{'code':'LOD'}) }}">logements</a></li>
-                <li><a href="{{ path('products_by_type',{'code':'ACT'}) }}">activités</a></li>
                 <li> <a href="{{ path('show_all_reservations') }}">liste des réservations</a></li>
+                <li> <a href="{{ path('show_all_products') }}">liste des produits</a></li>
+                {% endif %}
+                <li><a href="{{ path('products_by_type',{'code':'CAR'}) }}">  {{ 'Voitures' | trans }} </a></li>
+                <li><a href="{{ path('products_by_type',{'code':'LOD'}) }}"> {{ 'Logements' | trans }} </a></li>
+                <li><a href="{{ path('products_by_type',{'code':'ACT'}) }}"> {{ 'Activités' | trans }} </a></li>
+                
             </ul>
         {% endblock %}
         {% block body %}{% endblock %}
