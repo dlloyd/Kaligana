@@ -131,6 +131,8 @@ class ReservationController extends Controller
           'form' => $form->createView(),
           'stripe_public_key' => $this->getParameter('stripe_public_key'),
           'amount' => $amount,
+          'product' => $prod,
+          'reservation'=>$resaSession,
         ]);
         }
     }
@@ -158,6 +160,20 @@ class ReservationController extends Controller
     	$request->getSession()->getFlashBag()->add('error','Code réservation inexistant');
         return $this->render('reservation/reservation.html.twig');
     }
+
+    /**
+     * @Route("/resa/sess/remove/}", name="remove_reservation_session")
+     */
+    public function removeSessionReservationAction(Request $req){
+        $session = $req->getSession();
+        if($session->has('reservation')){
+            $session->remove('reservation');
+        }
+        return $this->redirectToRoute('homepage');
+
+    }
+
+
 
 
     public function generateCode($reservation){  //génère code de réservation unique 
@@ -231,7 +247,7 @@ class ReservationController extends Controller
           ->add('token', HiddenType::class, [
             'constraints' => [new Assert\NotBlank()],
           ])
-          ->add('submit', SubmitType::class)
+          ->add('submit', SubmitType::class, array('label' => 'Payer'))
           ->getForm();
     }
 

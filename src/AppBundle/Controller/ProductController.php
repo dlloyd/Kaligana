@@ -28,7 +28,9 @@ class ProductController extends Controller
     		return $this->redirectToRoute('homepage');
     	}
 
-        return $this->render('product/products-by-type.html.twig',array('type'=>$type,));
+    	$title = $this->getProductTypeName($code);
+
+        return $this->render('product/products-by-type.html.twig',array('type'=>$type,'title'=>$title,));
     }
 
 
@@ -231,5 +233,28 @@ class ProductController extends Controller
     	}
     	
     	return $this->redirectToRoute('show_all_products');
+    }
+
+
+    public function getProductTypeName($code){
+
+    	switch ($code) {
+    		case 'CAR':
+    			$title = 'Voitures';
+    			break;
+
+    		case 'LOD':
+    			$title = 'Logements';
+    			break;
+
+    		case 'ACT':
+    			$title = 'Activités';
+    			break;
+    		
+    		default:
+    			# code...
+    			break;
+    	}
+    	return $title;
     }
 }

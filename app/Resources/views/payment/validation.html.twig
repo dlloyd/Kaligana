@@ -2,17 +2,53 @@
 
 {% block body %}
 
-{{ form_start(form, {attr: {id: form.vars.id}}) }}
-<div class="form-group" style="width: 30%;">
+
+
+<div class="form-group" >
+	<h3>Informations:</h3>
+
+	{{ 'Nom' | trans }} : {{ product.name }} <br/>
+	{{ 'Description' | trans }} : {{ product.description }} <br/>
+
+	{% if app.request.locale == 'fr' %}
+		{{ 'Date début' | trans }} : {{reservation.dateBegin |date('d/m/Y')}} <br/>
+		{{ 'Date fin' | trans }} : {{reservation.dateEnd |date('d/m/Y')}} <br/>
+
+	{% else %}
+		{{ 'Date début' | trans }} : {{reservation.dateBegin |date('Y-m-d')}} <br/>
+		{{ 'Date fin' | trans }} : {{reservation.dateEnd |date('Y-m-d')}} <br/>
+	{% endif %}
+	{{ 'Prix' | trans }} :  {{ reservation.quantity }} x {{ product.priceUnit }} euro(s) <br/>
 	{{ 'Montant Total'|trans }}: {{ amount }} euro(s) <br/>
+	<a href="{{ path('remove_reservation_session') }}"> {{'Annuler'| trans }} </a> <br/>
+	
+  
+  
+  
+</div>
+<br/><br/>
+
+<h3>{{ 'Paiement' | trans }}:</h3>
+{{ form_start(form, {attr: {id: form.vars.id}}) }}
+
+{{ form_widget(form.token) }}
+
+{{ form_label(form.firstname,'Prénom client') }} : {{ form_widget(form.firstname) }} <br/>
+
+{{ form_label(form.lastname,'Nom client') }} : {{ form_widget(form.lastname) }} <br/>
+
+{{ form_label(form.email,'Email') }} : {{ form_widget(form.email) }} <br/> <br/>
+<div class="form-group" style="width: 30%;">
+	
   <label for="card-element">
     Credit or Debit Card
   </label>
   <div id="card-element" class="form-control"></div>
   <div id="card-errors" class="help-block" role="alert"></div>
 </div>
-{{ form_widget(form.token) }}
+
 {{ form_rest(form) }}
+
 {{ form_end(form) }}
 
 {% endblock %}
@@ -25,7 +61,9 @@
 	  var errors = document.getElementById('card-errors');
 	 
 	  var stripe = Stripe('{{ stripe_public_key }}');
-	  var elements = stripe.elements();
+	  var elements = stripe.elements({ locale:'{{ app.request.locale }}', });
+
+
 	  var card = elements.create('card');
 	 
 	  card.mount('#card-element');

@@ -7,6 +7,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr 
+    stripe_public_key: pk_test_xxxxxxxxxxxxxxxxxxxxxxxx
+    stripe_secret_key: sk_test_xxxxxxxxxxxxxxxxxxxxxxxx
 
 jms_i18n_routing:
     default_locale: fr

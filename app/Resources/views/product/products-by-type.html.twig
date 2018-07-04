@@ -2,8 +2,9 @@
 
 {% block body %}
 
+<h3> {{ title | trans }} </h3>
 <div class="items">
-	{{ type.name }}
+	
 {% for product in type.products %}
 	<div>
 		{% if product.isHidden == false %}
@@ -11,10 +12,10 @@
 		<img src="{{ asset('images_products/'~product.imgStarName) | imagine_filter('my_thumb') }}" alt="" />
 		{% endif %}
 
-		{{ product.name }}
-		{{ product.description }}
-		{{ product.priceUnit }}
-		<a href="{{ path('get_product',{'id':product.id }) }}"> Détails </a>
+		{{ 'Nom' | trans }} : {{ product.name }}
+		{{ 'Description' | trans }} : {{ product.description }}
+		{{ 'Prix' | trans }} : {{ product.priceUnit }}
+		<a href="{{ path('get_product',{'id':product.id }) }}">   {{ 'Détails' | trans }} </a>
 		{% endif %}
 	</div>
 

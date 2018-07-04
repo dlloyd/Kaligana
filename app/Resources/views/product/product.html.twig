@@ -21,7 +21,7 @@
 	<h4>Réservation</h4>
 	{{ render(controller('AppBundle:Reservation:create',{ 'productId': product.id } )) }}
 
-	Montant Total:<span id="amount"> 1 x {{ product.priceUnit }} : {{ product.priceUnit }} </span> euro(s)
+	{{'Montant Total'| trans }}:<span id="amount"> 1 x {{ product.priceUnit }} : {{ product.priceUnit }} </span> euro(s)
 
 </div>
 </div>
@@ -36,9 +36,7 @@
 
 	$(document).ready(function() {
 	$("#form_dateUnique").flatpickr({
-		{% if  app.request.locale != 'en' %}
-		locale: 'fr',
-		{% endif %}
+		locale: '{{ app.request.locale }}',
 		minDate: "today",
 		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		onChange: function(selectedDates, dateStr, instance) {
@@ -51,9 +49,8 @@
 	});
 
 	$("#form_dateRange").flatpickr({
-		{% if  app.request.locale != 'en' %}
-		locale: 'fr',
-		{% endif %}
+
+		locale: '{{ app.request.locale }}',
 		minDate: "today",
 		disable: [ {% for resa in product.reservations %} { from: "{{resa.dateBegin |date('Y-m-d')}}" , to: "{{resa.dateEnd|date('Y-m-d')}}"  }, {% endfor %}],
 		mode: "range",
