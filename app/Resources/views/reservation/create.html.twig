@@ -15,6 +15,21 @@
 {{ form_start(form, {'method': 'post', 'action': path('create_reservation',{productId: id }) }) }}
 
     <div id="resa">
+
+    <div class="checkboxes in-row margin-bottom-20">
+    	
+    	{{ form_widget(form.manyDays) }}
+    	{{ form_label(form.manyDays) }}
+    </div>
+	{{ form_label(form.dateUnique) }}
+	{{ form_widget(form.dateUnique) }}
+
+	
+	{{ form_label(form.dateRange) }}
+	{{ form_widget(form.dateRange) }}
+
+	{{ form_widget(form.save,{'attr':{'class': 'button book-now fullwidth margin-top-5' }}) }}
+    	
              
     {{ form_rest(form) }}
 	</div>

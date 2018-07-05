@@ -14,6 +14,25 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->render('default/index.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $data = array();
+        $types = $em->getRepository('AppBundle:ProductType')->findAll();
+        foreach ($types as $type) {
+        	switch ($type->getCode()) {
+        		case 'CAR':
+        			$data['cars'] = $em->getRepository('AppBundle:Product')->findLastByType($type->getId(),5);
+        			break;
+
+        		case 'LOD':
+        			$data['lodgments'] = $em->getRepository('AppBundle:Product')->findLastByType($type->getId(),6);
+        			break;
+        		
+        		default:
+        			$data['activities'] = $em->getRepository('AppBundle:Product')->findLastByType($type->getId(),3);
+        			break;
+        	}
+        }
+        
+        return $this->render('default/index.html.twig',array('data'=>$data,));
     }
 }

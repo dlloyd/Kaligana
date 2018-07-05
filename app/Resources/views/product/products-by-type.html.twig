@@ -2,28 +2,154 @@
 
 {% block body %}
 
-<h3> {{ title | trans }} </h3>
-<div class="items">
-	
-{% for product in type.products %}
-	<div>
-		{% if product.isHidden == false %}
-		{% if product.imgStarName != null %}
-		<img src="{{ asset('images_products/'~product.imgStarName) | imagine_filter('my_thumb') }}" alt="" />
-		{% endif %}
 
-		{{ 'Nom' | trans }} : {{ product.name }}
-		{{ 'Description' | trans }} : {{ product.description }}
-		{{ 'Prix' | trans }} : {{ product.priceUnit }}
-		<a href="{{ path('get_product',{'id':product.id }) }}">   {{ 'Détails' | trans }} </a>
-		{% endif %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>{{ title|trans }}</h2><span>Liste des nos {{ title|trans }}</span>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="{{ path('homepage') }}">Accueil</a></li>
+						<li>{{ title | trans }}</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
 	</div>
-
-
-{% endfor %}
 </div>
 
 
+<!-- Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		
+		<!-- Search -->
+		<div class="col-md-12">
+			<div class="main-search-input gray-style margin-top-0 margin-bottom-10">
+
+				<div class="main-search-input-item">
+					<input type="text" placeholder="What are you looking for?" value=""/>
+				</div>
+
+				<div class="main-search-input-item location">
+					<div id="autocomplete-container">
+						<input id="autocomplete-input" type="text" placeholder="Location">
+					</div>
+					<a href="#"><i class="fa fa-map-marker"></i></a>
+				</div>
+
+				<div class="main-search-input-item">
+					<select data-placeholder="All Categories" class="chosen-select" >
+						<option>All Categories</option>	
+						<option>Shops</option>
+						<option>Hotels</option>
+						<option>Restaurants</option>
+						<option>Fitness</option>
+						<option>Events</option>
+					</select>
+				</div>
+
+				<button class="button">Search</button>
+			</div>
+		</div>
+		<!-- Search Section / End -->
+
+
+		<div class="col-md-12">
+
+			<!-- Sorting - Filtering Section -->
+			<div class="row margin-bottom-25 margin-top-30">
+
+				<div class="col-md-6">
+					<!-- Layout Switcher -->
+					<div class="layout-switcher">
+						<a href="#" class="grid active"><i class="fa fa-th"></i></a>
+						<a href="listings-list-full-width.html" class="list"><i class="fa fa-align-justify"></i></a>
+					</div>
+				</div>
+
+				
+
+			</div>
+			<!-- Sorting - Filtering Section / End -->
+
+
+			<div class="row">
+
+				
+
+				{% for product in type.products %}
+	
+					{% if product.isHidden == false %}
+						<!-- Listing Item -->
+						<div class="col-lg-4 col-md-6">
+							<a href="{{ path('get_product',{'id':product.id}) }}" class="listing-item-container compact">
+								<div class="listing-item">
+									{% if product.imgStarName != null %}
+										<img src="{{ asset('images_products/'~product.imgStarName) }}" alt=""/> 
+									{% else %}
+									<img src="#" alt="">
+									{% endif %}
+
+
+									<div class="listing-item-content">
+										
+										<h3>{{ product.name }} </h3>
+										<span class="tag">{{ product.priceUnit }} euro(s)</span><br/>
+										<span>{{ product.description }}</span>
+									</div>
+									<span class="like-icon"></span>
+									
+								</div>
+							</a>
+						</div>
+						<!-- Listing Item / End -->
+				    {% endif %}
+
+				{% endfor %}
+
+
+			</div>
+
+			<!-- Pagination -->
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Pagination -->
+					<div class="pagination-container margin-top-20 margin-bottom-40">
+						<nav class="pagination">
+							<ul>
+								<li><a href="#" class="current-page">1</a></li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+			<!-- Pagination / End -->
+
+		</div>
+
+	</div>
+</div>
+
 {% endblock %}
+
+
+
+
+
+
+
 
 
