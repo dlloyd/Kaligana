@@ -2,6 +2,10 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\InvalidArgumentException;
+
 /**
  * ProductRepository
  *
@@ -12,7 +16,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
 	public function findLastByType($typeId,$number) {
 		$qb = $this->createQueryBuilder('p');
-		$qb->where('p.productType = :type');
+		$qb->where('p.productType = :type')
+		->andWhere('p.isHidden = false');
 		$qb->orderBy('p.id', 'DESC');
 		$qb->setMaxResults($number);
 		$qb->setParameter('type',$typeId);
@@ -21,15 +26,41 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 		return $qb->getQuery()->getResult();
 	}
 
-	public function findPageContentByType($typeId,$page) {
-		$qb = $this->createQueryBuilder('p');
-		$qb->where('p.productType = :type');
-		$qb->orderBy('p.id', 'DESC');
-		$qb->setFirstResult($page-1);
-		$qb->setMaxResults(20);
-		$qb->setParameter('type',$typeId);
-		
 
-		return $qb->getQuery()->getResult();
-	}
+	public function findPageContentByType($typeId,$page,$nbMaxParPage)
+    {
+        if (!is_numeric($page)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $page est incorrecte (valeur : ' . $page . ').'
+            );
+        }
+
+        if ($page < 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas');
+        }
+
+        if (!is_numeric($nbMaxParPage)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $nbMaxParPage est incorrecte (valeur : ' . $nbMaxParPage . ').'
+            );
+        }
+    
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.productType = :type')
+            ->andWhere('p.isHidden = false')
+			->orderBy('p.id', 'DESC')
+			->setParameter('type',$typeId);
+        
+        $query = $qb->getQuery();
+
+        $premierResultat = ($page - 1) * $nbMaxParPage;
+        $query->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+        $paginator = new Paginator($query);
+
+        if ( ($paginator->count() <= $premierResultat) && $page != 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+        }
+
+        return $paginator;
+    }
 }

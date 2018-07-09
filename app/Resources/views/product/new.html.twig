@@ -14,11 +14,134 @@
 </ul>
 {%endif%}
 
-{{ form_start(form, {'method': 'post', 'action': path('add_product') }) }}
 
-                
-    {{ form_rest(form) }}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2><i class="sl sl-icon-plus"></i> Ajouter produit</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="{{ path('homepage') }}">Accueil</a></li>
+						<li>Ajouter produit</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Content
+================================================== -->
+
+
+<!-- Container -->
+<div class="container">
+
+		<div class="row">
+			<div class="col-lg-12">
+
+				
+
+				<div id="add-listing" class="separated-form">
+					{{ form_start(form, {'method': 'post', 'action': path('add_product') }) }}
+					<!-- Section -->
+					<div class="add-listing-section">
+
+						<!-- Headline -->
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-doc"></i> Basic Informations</h3>
+						</div>
+
+						
+
+						<!-- Row -->
+						<div class="row with-forms">
+
+							
+								<div class="col-md-6">
+									<h5>{{ form_label(form.name,'Nom') }}</h5>
+									{{ form_widget(form.name) }}
+								</div>
+
+								<div class="col-md-6">
+									<div class="col-md-4">
+									<h5>{{ form_label(form.priceUnit,'Prix Unitaire') }}</h5>
+									{{ form_widget(form.priceUnit) }} 
+									</div>
+									<div class="col-md-2">
+									 <br/><br/>&euro;
+									</div>
+									
+								</div>
+								<div class="col-md-6">
+									<h5>{{ form_label(form.productType,'Type produit') }}</h5>
+									{{ form_widget(form.productType,{'attr':{'class': 'chosen-select-no-single' }}) }}
+								</div>
+
+
+								<div class="col-md-6">
+									<h5> Durée </h5>
+								<div class="col-md-2">
+									
+									{{ form_widget(form.durationNumber) }}
+								</div>
+
+								<div class="col-md-4">
+									
+									{{ form_widget(form.durationType,{'attr':{'class': 'chosen-select-no-single' }}) }}
+								</div>
+								</div>
+
+
+						</div>
+						<!-- Row / End -->
+
+					</div>
+					<!-- Section / End -->
+
+
+					<!-- Section -->
+					<div class="add-listing-section margin-top-45">
+
+						<!-- Headline -->
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-docs"></i> Details</h3>
+						</div>
+
+						<!-- Description -->
+						<div class="form">
+							<h5>{{ form_label(form.description) }}</h5>
+							{{ form_widget(form.description,{'attr':{'class': 'WYSIWYG' }}) }}
+							
+						</div>
+
+
+						
+
+					</div>
+					<!-- Section / End -->
+
+
+					{{ form_widget(form.save,{'attr':{'class': 'button preview' }}) }} <br/><br/>
+
+					
+					{{ form_rest(form) }}
     
-{{ form_end(form) }}
+					{{ form_end(form) }}
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
 
 {% endblock %}

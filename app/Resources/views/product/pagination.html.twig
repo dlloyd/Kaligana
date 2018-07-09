@@ -1,0 +1,55 @@
+
+<!-- Pagination -->
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12">
+    <!-- Pagination -->
+    <div class="pagination-container margin-top-20 margin-bottom-40">
+        <nav class="pagination">
+    {% if pagination.nbPages > 0 %}
+        <ul>
+            {% if pagination.page > 1 %}
+                <li>
+                    <a href="{{ path(pagination.nameRoute, pagination.paramsRoute|merge({'page': 1})) }}">
+                        <i class="sl sl-icon-arrow-left"></i><i class="sl sl-icon-arrow-left"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path(pagination.nameRoute,
+                    pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
+                        <i class="sl sl-icon-arrow-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+
+            {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
+            {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
+                <li {% if p == pagination.page %}class="current-page"{% endif %}>
+                    <a href="{{ path(pagination.nameRoute, pagination.paramsRoute|merge({'page': p})) }}">
+                        {{ p }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if pagination.page < pagination.nbPages %}
+                <li>
+                    <a href="{{ path(pagination.nameRoute,
+                    pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
+                        <i class="sl sl-icon-arrow-right"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path(pagination.nameRoute,
+                    pagination.paramsRoute|merge({'page': pagination.nbPages})) }}">
+                        <i class="sl sl-icon-arrow-right"></i><i class="sl sl-icon-arrow-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+    </nav>
+    </div>
+    </div>
+</div>
+<!-- Pagination / End -->

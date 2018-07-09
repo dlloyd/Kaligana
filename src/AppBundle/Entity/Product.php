@@ -29,7 +29,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ProductType", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ProductType")
      * @ORM\JoinColumn(nullable=false)
     */
     private $productType;
@@ -84,7 +84,9 @@ class Product
      *
      * @ORM\Column(name="is_hidden", type="boolean")
      */
-    private $is_hidden;  
+    private $isHidden;  
+
+    
 
 
     /**
@@ -170,14 +172,7 @@ class Product
     {
         return $this->durationType;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->reservations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    
 
     /**
      * Add image
@@ -352,7 +347,7 @@ class Product
      */
     public function setIsHidden($isHidden)
     {
-        $this->is_hidden = $isHidden;
+        $this->isHidden = $isHidden;
 
         return $this;
     }
@@ -364,6 +359,16 @@ class Product
      */
     public function getIsHidden()
     {
-        return $this->is_hidden;
+        return $this->isHidden;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reservations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    
 }

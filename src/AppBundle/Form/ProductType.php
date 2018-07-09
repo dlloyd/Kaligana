@@ -22,7 +22,8 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name',TextType::class)
-            ->add('description',TextareaType::class)
+            ->add('description',TextareaType::class, array(
+                        'attr' => array('cols' => '40', 'rows' => '3','spellcheck'=>'true')))
             ->add('priceUnit', NumberType::class, array('scale' => 2,))
             ->add('durationNumber', IntegerType::class,array('data' => 1,'attr'=>array('min'=>1)))
             ->add('durationType', ChoiceType::class, array(

@@ -35,25 +35,14 @@
 		<div class="col-md-12">
 			<div class="main-search-input gray-style margin-top-0 margin-bottom-10">
 
-				<div class="main-search-input-item">
-					<input type="text" placeholder="What are you looking for?" value=""/>
-				</div>
-
-				<div class="main-search-input-item location">
-					<div id="autocomplete-container">
-						<input id="autocomplete-input" type="text" placeholder="Location">
-					</div>
-					<a href="#"><i class="fa fa-map-marker"></i></a>
-				</div>
-
+				
 				<div class="main-search-input-item">
 					<select data-placeholder="All Categories" class="chosen-select" >
-						<option>All Categories</option>	
-						<option>Shops</option>
-						<option>Hotels</option>
-						<option>Restaurants</option>
-						<option>Fitness</option>
-						<option>Events</option>
+						<option>Toutes catégories</option>	
+						<option>Caractéristique 1</option>
+						<option>Caractéristique 2</option>
+						<option>Caractéristique 3</option>
+						<option>Caractéristique 4</option>
 					</select>
 				</div>
 
@@ -66,27 +55,14 @@
 		<div class="col-md-12">
 
 			<!-- Sorting - Filtering Section -->
-			<div class="row margin-bottom-25 margin-top-30">
-
-				<div class="col-md-6">
-					<!-- Layout Switcher -->
-					<div class="layout-switcher">
-						<a href="#" class="grid active"><i class="fa fa-th"></i></a>
-						<a href="listings-list-full-width.html" class="list"><i class="fa fa-align-justify"></i></a>
-					</div>
-				</div>
-
-				
-
-			</div>
+			<div class="row margin-bottom-25 margin-top-30"></div>
 			<!-- Sorting - Filtering Section / End -->
 
 
 			<div class="row">
-
 				
 
-				{% for product in type.products %}
+				{% for product in products %}
 	
 					{% if product.isHidden == false %}
 						<!-- Listing Item -->
@@ -103,8 +79,8 @@
 									<div class="listing-item-content">
 										
 										<h3>{{ product.name }} </h3>
-										<span class="tag">{{ product.priceUnit }} euro(s)</span><br/>
-										<span>{{ product.description }}</span>
+										<span class="tag">{{ product.priceUnit }} &euro;</span><br/>
+										<span>{{ product.description | slice(0,50) }}...</span>
 									</div>
 									<span class="like-icon"></span>
 									
@@ -119,24 +95,8 @@
 
 			</div>
 
-			<!-- Pagination -->
-			<div class="clearfix"></div>
-			<div class="row">
-				<div class="col-md-12">
-					<!-- Pagination -->
-					<div class="pagination-container margin-top-20 margin-bottom-40">
-						<nav class="pagination">
-							<ul>
-								<li><a href="#" class="current-page">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-			</div>
-			<!-- Pagination / End -->
+			
+			{% include 'product/pagination.html.twig' %}
 
 		</div>
 

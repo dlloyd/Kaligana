@@ -15,7 +15,7 @@
 {{ form_start(form, {'method': 'post', 'action': path('create_reservation',{productId: id }) }) }}
 
     <div id="resa">
-
+     {% if form.dateRange is defined %}
     <div class="checkboxes in-row margin-bottom-20">
     	
     	{{ form_widget(form.manyDays) }}
@@ -27,6 +27,11 @@
 	
 	{{ form_label(form.dateRange) }}
 	{{ form_widget(form.dateRange) }}
+
+    {% else %}
+        {{ form_label(form.quantity) }}
+        {{ form_widget(form.quantity) }}
+    {% endif %}
 
 	{{ form_widget(form.save,{'attr':{'class': 'button book-now fullwidth margin-top-5' }}) }}
     	

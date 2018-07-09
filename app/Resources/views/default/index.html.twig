@@ -68,7 +68,7 @@
 					<a href="{{ path('get_product',{'id':product.id}) }}" class="listing-item-container">
 						<div class="listing-item">
 							{% if product.imgStarName != null %}
-								<img src="{{ asset('images_products/'~product.imgStarName) | imagine_filter('my_thumb') }}" alt=""/> 
+								<img src="{{ asset('images_products/'~product.imgStarName) }}" alt=""/> 
 							{% else %}
 							<img src="#" alt="">
 							{% endif %}
@@ -78,8 +78,8 @@
 							<div class="listing-item-content">
 								
 								<h3>{{ product.name }}  </h3>
-								<span class="tag">{{ product.priceUnit }} euro(s)</span>
-								<span>{{ product.description }}</span>
+								<span class="tag">{{ product.priceUnit }} &euro;</span>
+								<span>{{ product.description | slice(0,50) }}...</span>
 							</div>
 							<span class="like-icon"></span>
 						</div>
@@ -137,12 +137,13 @@
 					
 						<div class="category-box-content">
 							<h3>{{ product.name }}</h3>
-							<span> {{ product.description }} </span>
+							<span> {{ product.description | slice(0,50) }}... </span>
 						</div>
-						<span class="category-box-btn"> {{ product.priceUnit }} </span>
+						<span class="category-box-btn"> {{ product.priceUnit }} &euro; </span>
 					</a>
 				</div>
 		{% elseif index == 2 %}
+
 			<div class="category-box-container half">
 			{% if product.imgStarName != null %}
 				<a href="{{ path('get_product',{'id':product.id}) }}" class="category-box" data-background-image="{{ asset('images_products/'~product.imgStarName) }}" > 
@@ -152,15 +153,15 @@
 			
 				<div class="category-box-content">
 					<h3>{{ product.name }}</h3>
-					<span> {{ product.description }} </span>
+					<span> {{ product.description | slice(0,50) }}... </span>
 				</div>
-				<span class="category-box-btn"> {{ product.priceUnit }} </span>
+				<span class="category-box-btn"> {{ product.priceUnit }} &euro; </span>
 			</a>
 			</div>
 			</div>
 		{% else %}
 			<div class="fw-carousel-item">
-			<div class="category-box-container half">
+			<div class="category-box-container">
 				{% if product.imgStarName != null %}
 					<a href="{{ path('get_product',{'id':product.id}) }}" class="category-box" data-background-image="{{ asset('images_products/'~product.imgStarName) }}" > 
 				{% else %}
@@ -169,9 +170,9 @@
 				
 					<div class="category-box-content">
 						<h3>{{ product.name }}</h3>
-						<span> {{ product.description }} </span>
+						<span> {{ product.description | slice(0,50) }}... </span>
 					</div>
-					<span class="category-box-btn"> {{ product.priceUnit }} </span>
+					<span class="category-box-btn"> {{ product.priceUnit }} &euro; </span>
 				</a>
 			</div>
 
@@ -211,11 +212,11 @@
 						{% else %}
 						<img src="#" alt="">
 						{% endif %}
-						<span class="blog-item-tag">{{ product.priceUnit }} euro(s)</span>
+						<span class="blog-item-tag">{{ product.priceUnit }} &euro;</span>
 						<div class="blog-compact-item-content">
 							
 							<h3>{{ product.name }}</h3>
-							<p>{{ product.description }}</p>
+							<p>{{ product.description | slice(0,50) }}...</p>
 						</div>
 					</div>
 				</a>
@@ -226,7 +227,7 @@
 			
 
 			<div class="col-md-12 centered-content">
-				<a href="{{ path('products_by_type',{'code':'ACT'}) }}" class="button border margin-top-10">Voir autres</a>
+				<a href="{{ path('products_by_type',{'code':'ACT','page':1}) }}" class="button border margin-top-10">Voir autres</a>
 			</div>
 
 		</div>
@@ -243,8 +244,8 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h2 class="headline centered margin-top-80">
-				Plan The Vacation of Your Dreams 
-				<span class="margin-top-25">Explore some of the best tips from around the world from our partners and friends.  Discover some of the most popular listings in Sydney.</span>
+				Profitez avec Kaligana des offres les plus intéressantes. 
+				<span class="margin-top-25">Maecenas pulvinar, risus in facilisis dignissim, quam nisi hendrerit nulla, id vestibulum metus nullam viverra porta purus.</span>
 			</h2>
 		</div>
 	</div>
@@ -254,7 +255,7 @@
 		<div class="col-md-4">
 			<div class="icon-box-2 with-line">
 				<i class="im im-icon-Map2"></i>
-				<h3>Find Interesting Place</h3>
+				<h3>Trouvez nos meilleurs plans</h3>
 				<p>Proin dapibus nisl ornare diam varius tempus. Aenean a quam luctus, finibus tellus ut, convallis eros sollicitudin turpis.</p>
 			</div>
 		</div>
@@ -263,7 +264,7 @@
 		<div class="col-md-4">
 			<div class="icon-box-2 with-line">
 				<i class="im im-icon-Mail-withAtSign"></i>
-				<h3>Contact a Few Owners</h3>
+				<h3>Contactez l'agence</h3>
 				<p>Maecenas pulvinar, risus in facilisis dignissim, quam nisi hendrerit nulla, id vestibulum metus nullam viverra porta purus.</p>
 			</div>
 		</div>
@@ -272,7 +273,7 @@
 		<div class="col-md-4">
 			<div class="icon-box-2">
 				<i class="im im-icon-Checked-User"></i>
-				<h3>Make a Reservation</h3>
+				<h3>Reserver facilement</h3>
 				<p>Faucibus ante, in porttitor tellus blandit et. Phasellus tincidunt metus lectus sollicitudin feugiat pharetra consectetur.</p>
 			</div>
 		</div>

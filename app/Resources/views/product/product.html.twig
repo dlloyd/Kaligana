@@ -15,8 +15,15 @@
 			<!-- Titlebar -->
 			<div id="titlebar" class="listing-titlebar">
 				<div class="listing-titlebar-title">
-					<img src="#">
-					<h2>{{ product.name }} <span class="listing-tag">{{ product.productType.name }}</span></h2>
+					{% if product.imgStarName != null %}
+						<div style="width: 248px;height: 200px;"> 
+							<img style="width: 100%;height: auto;" src="{{ asset('images_products/'~product.imgStarName) }}" alt=""/> 
+						</div>	
+					{% else %}
+						<img src="#" alt="">
+					{% endif %}
+					
+					<h2>{{ product.name }} <span class="listing-tag"> {{ product.priceUnit }}&euro;/{{ product.durationType|trans }}</span></h2>
 					
 				</div>
 			</div>
@@ -39,16 +46,7 @@
 					{{ product.description }}
 				</p>
 
-				<!-- Amenities -->
-				<h3 class="listing-desc-headline">Caractéristiques</h3>
-				<ul class="listing-features checkboxes">
-					<li>Elevator in building</li>
-					<li>Friendly workspace</li>
-					<li>Instant Book</li>
-					<li>Wireless Internet</li>
-					<li>Free parking on premises</li>
-					<li>Free parking on street</li>
-				</ul>
+				
 			</div>
 
 
@@ -83,7 +81,7 @@
 		<div class="col-lg-4 col-md-4 margin-top-75 sticky">
 
 			<div class="verified-badge with-tip" data-tip-content="Montant total pour le nombre de jours">
-				{{'Montant'| trans }}: &nbsp <span id="amount">{{ product.priceUnit }} </span> euro(s)
+				{{'Total'| trans }}: &nbsp <span id="amount">{{ product.priceUnit }} </span> &euro;
 			</div>
 
 			
@@ -100,8 +98,19 @@
 				
 				<h3><i class="sl sl-icon-clock"></i> Obligatoire</h3>
 				<ul>
-					<li>Permis<span> A</span></li>
-					<li>Age <span> +18 ans</span></li>
+					{% if product.productType.code == "CAR" %}
+						<li>Permis<span> A</span></li>
+						<li>Age <span> +18 ans</span></li>
+						<li>Attribution permis <span>minimum 5 ans</span> </li>
+					{% elseif product.productType.code == "LOD" %}
+	
+						<li>Age <span> +18 ans</span></li>
+					{% elseif product.productType.code == "ACT" %}
+
+					{% endif %}
+						<li>Conditions générales<span> <a href="#" target="blank">voir</a></span></li>
+					
+					
 					
 				</ul>
 			</div>
@@ -122,12 +131,14 @@
 {% block javascripts %}
 
 {{ parent() }}
+
+{% if product.productType.code != "ACT" %}
 <script type="text/javascript">
 
 	$(document).ready(function() {
 
 		checkDateResa();
-		
+
 		$("#form_dateUnique").flatpickr({
 			locale: '{{ app.request.locale }}',
 			minDate: "today",
@@ -175,12 +186,17 @@
 		function checkDateResa(){
 			if($('#form_manyDays').is(':checked')){
 				$("#form_dateUnique").hide();
+				$('label[for="form_dateUnique"]').hide();
 				$("#form_dateUnique").val('');
 				$("#form_dateRange").show();
+				$('label[for="form_dateRange"]').show();
 			}
 			else{
 				$("#form_dateUnique").show();
+				$('label[for="form_dateUnique"]').show();
 				$("#form_dateRange").hide();
+				$('label[for="form_dateRange"]').hide();
+
 				$("#form_dateRange").val('');
 			}
 				$("#form_quantity").val(1);
@@ -193,6 +209,7 @@
 
 	
 </script>
+{% endif %}
 
 
 {% endblock %}

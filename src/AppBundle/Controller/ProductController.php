@@ -17,20 +17,34 @@ use AppBundle\Entity\Image;
 class ProductController extends Controller
 {
 	/**
-     * @Route("/products/type/{code}", name="products_by_type")
+     * @Route("/products/type/{code}/{page}",requirements={"page" = "\d+"}, name="products_by_type")
      */
-    public function productsByTypeAction($code)
+    public function productsByTypeAction($code,$page)
     {
     	$em = $this->getDoctrine()->getManager();
     	$type = $em->getRepository('AppBundle:ProductType')->findOneBy(array('code'=>$code));
 
+    	//verify type exists
     	if(!$type){
     		return $this->redirectToRoute('homepage');
     	}
 
+    	$nbProductsByPage = $this->container->getParameter('front_nb_products_by_page');
+
     	$title = $this->getProductTypeName($code);
 
-        return $this->render('product/products-by-type.html.twig',array('type'=>$type,'title'=>$title,));
+    	$prods = $em->getRepository('AppBundle:Product')
+            ->findPageContentByType($type->getId(),$page, $nbProductsByPage);
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($prods) / $nbProductsByPage),
+            'nameRoute' => 'products_by_type',
+            'paramsRoute' => array('code'=>$code),
+        );
+
+        return $this->render('product/products-by-type.html.twig',
+        	array('products'=>$prods,'pagination'=>$pagination,'title'=>$title,));
     }
 
 

@@ -106,9 +106,20 @@
                     <ul id="responsive">
 
                         <li><a href="{{ path('homepage') }}">  {{ 'Accueil' | trans }} </a></li>
-                <li><a href="{{ path('products_by_type',{'code':'CAR'}) }}">  {{ 'Voitures' | trans }} </a></li>
-                <li><a href="{{ path('products_by_type',{'code':'LOD'}) }}"> {{ 'Logements' | trans }} </a></li>
-                <li><a href="{{ path('products_by_type',{'code':'ACT'}) }}"> {{ 'Activités' | trans }} </a></li>
+                <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
+                <li><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"> {{ 'Logements' | trans }} </a></li>
+                <li><a href="{{ path('products_by_type',{'code':'ACT','page':1}) }}"> {{ 'Activités' | trans }} </a></li>
+                <li><a href="#">Administrateur Panel</a>
+                    <ul>
+                {% if is_granted('ROLE_ADMIN') %}
+                     <li><a href="{{ path('add_product') }}">ajouter produit</a> </li>
+                    <li> <a href="{{ path('show_all_reservations') }}">liste des réservations</a> </li>
+                     <li><a href="{{ path('show_all_products') }}">liste des produits</a></li>
+                    
+                    
+                    
+                {% endif %}
+                    </ul>
 
                         
                     </ul>
@@ -124,10 +135,6 @@
             <div class="right-side">
                 <div class="header-widget">
                     {% if is_granted('ROLE_ADMIN') %}
-                     <a href="{{ path('add_product') }}">ajouter produit</a> 
-                     <a href="{{ path('show_all_reservations') }}">liste des réservations</a>
-                     <a href="{{ path('show_all_products') }}">liste des produits</a>
-                     <a href="{{ path('fos_user_security_logout') }}">se déconnecter</a>
                     
                     <a href="{{ path('fos_user_security_logout') }}" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> se déconnecter</a>
                     

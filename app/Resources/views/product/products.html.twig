@@ -3,15 +3,49 @@
 
 {% block body %}
 
+
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+        <h2><i class="sl sl-icon-list"></i> Liste des produits</h2>
+
+        <!-- Breadcrumbs -->
+        <nav id="breadcrumbs">
+          <ul>
+            <li><a href="{{ path('homepage') }}">Accueil</a></li>
+            <li>Liste des produits</li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Content
+================================================== -->
+
+
+<!-- Container -->
+
+
 <div class="container">
   <h3> liste des produits  </h3>
 
   
 
   <br/><br/>
-
-  <input id="myInput" type="text" name="search" />
-           
+  <div class="row">
+  <div class="col-md-6">
+  <input id="myInput" type="text" name="search" placeholder="Recherche" />
+  </div>
+  </div>
+  <br/><br/><br/>        
   <table class="table table-striped">
     <thead>
       <tr>
@@ -40,6 +74,7 @@
       
     </tbody>
   </table>
+  <br/><br/><br/>
 </div>
 {% block javascripts %}
   {{ parent() }}
