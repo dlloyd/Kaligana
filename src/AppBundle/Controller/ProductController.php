@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
 use AppBundle\Entity\Image;
+use AppBundle\Form\ImageType;
 
 class ProductController extends Controller
 {
@@ -49,7 +49,7 @@ class ProductController extends Controller
 
 
     /**
-     * @Route("/products/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1}, name="get_product")
+     * @Route("/product/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1}, name="get_product")
      */
     public function getProductAction($id){
     	$em = $this->getDoctrine()->getManager();
@@ -132,41 +132,47 @@ class ProductController extends Controller
     public function addImageProductAction(Request $req,$id){
     	$em = $this->getDoctrine()->getManager();
     	$prod = $em->getRepository('AppBundle:Product')->find($id);
-    	$image = new Image();
-    	$image->setProduct($prod);
+        $images = array();
+    	
 
-    	$form = $this->createFormBuilder($image)
-            ->add('imageFile', FileType::class )
-            ->add('isStar', CheckboxType::class, array(
-			    'label'    => 'Image vedette ?',
-			    'required' => false,
-			))
+    	$form = $this->createFormBuilder($images)
+            ->add('images',CollectionType::class, array(
+                    'entry_type' => ImageType::class,
+                    'entry_options' => array('label' => false),
+                    'allow_add' => true,
+                ))
             ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
             ->getForm();
 
         $form->HandleRequest($req);
     	if($form->isSubmitted() && $form->isValid()){
            $em = $this->getDoctrine()->getManager();
-           $em->persist($image);
-           if($image->getIsStar()){
-           	foreach ($prod->getImages() as $img) {
-           		if($img->getIsStar())
-           			$img->setIsStar(false);
-           	}
-           	$prod->setImgStarName($image->getName());
-           	$em->merge($prod);
-           }
 
-           
+           foreach ($form['images']->getData() as $img) {
+                if($img->getIsStar()){
+                    foreach ($prod->getImages() as $prodImg) {
+                        if($prodImg->getIsStar())
+                            $prodImg->setIsStar(false);
+                    }
+                    $prod->setImgStarName($img->getName());
+                           
+                }
+            $img->setProduct($prod);
+            $prod->addImage($img);
+
+            }
+
+           $em->merge($prod);
            $em->flush();
-           $req->getSession()->getFlashBag()->add('notice','Image ajouté');
+           
+           $req->getSession()->getFlashBag()->add('notice','Image(s) ajoutée(s)');
            return $this->redirectToRoute('add_product_image',array('id'=>$id));
         }
+        
 
         return $this->render('product/prod-images.html.twig', array(
             'form' => $form->createView(), 'product'=>$prod,
         ));
-
     }
 
     /**

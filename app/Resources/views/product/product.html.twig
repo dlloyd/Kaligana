@@ -2,8 +2,16 @@
 
 {% block body %}
 
-<!-- Gradient-->
-<div class="single-listing-page-titlebar"></div>
+<!-- Slider
+================================================== -->
+<div class="listing-slider mfp-gallery-container margin-bottom-0">
+	{% for img in product.images %}
+		<a href="{{ asset('images_products/'~img.name) }}" data-background-image="{{ asset('images_products/'~img.name) }}" class="item mfp-gallery" ></a>
+						
+	{% endfor %}
+	
+</div>
+
 
 
 <!-- Content
@@ -15,13 +23,6 @@
 			<!-- Titlebar -->
 			<div id="titlebar" class="listing-titlebar">
 				<div class="listing-titlebar-title">
-					{% if product.imgStarName != null %}
-						<div style="width: 248px;height: 200px;"> 
-							<img style="width: 100%;height: auto;" src="{{ asset('images_products/'~product.imgStarName) }}" alt=""/> 
-						</div>	
-					{% else %}
-						<img src="#" alt="">
-					{% endif %}
 					
 					<h2>{{ product.name }} <span class="listing-tag"> {{ product.priceUnit }}&euro;/{{ product.durationType|trans }}</span></h2>
 					
@@ -80,7 +81,7 @@
 		================================================== -->
 		<div class="col-lg-4 col-md-4 margin-top-75 sticky">
 
-			<div class="verified-badge with-tip" data-tip-content="Montant total pour le nombre de jours">
+			<div class="verified-badge with-tip" data-tip-content="Montant total pour le nombre de jours ou heures">
 				{{'Total'| trans }}: &nbsp <span id="amount">{{ product.priceUnit }} </span> &euro;
 			</div>
 
@@ -209,6 +210,27 @@
 
 	
 </script>
+
+
+{% else %}
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$("#form_quantity").change(function(){
+			var quantity = $(this).val();
+			var total = parseFloat(quantity * {{ product.priceUnit }}).toFixed(2); 
+			$("#amount").text(total);
+
+		});
+
+		
+});
+
+	
+</script>
+
 {% endif %}
 
 

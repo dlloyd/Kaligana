@@ -2,31 +2,158 @@
 
 {% block body %}
 
-<div class="item-imgs">
-	{% for img in product.images %}
-		<div> <img src="{{ asset('images_products/'~img.name) | imagine_filter('my_thumb') }}">
-			{% if img.isStar != true %}
-			<a href="{{ path('change_product_image_star',{'imgId':img.id}) }} "> Rendre vedette </a>
-			{% endif %}
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+
+		<!-- Content
+		================================================== -->
+		<div class="col-lg-8 col-md-8 padding-right-30">
+				
+			
+
+			<!-- Dropzone -->
+			<div class="add-listing-section margin-top-45">
+
+				<!-- Headline -->
+				<div class="add-listing-headline">
+					<h3><i class="sl sl-icon-picture"></i> Gallerie</h3>
+				</div>
+
+				<!-- Dropzone -->
+				<div class="submit-section">
+					{{ form_start(form, {'method': 'post', 'action': path('add_product_image',{'id':product.id}) }) }}
+
+					<ul class="images" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+						
+				    
+					</ul>
+					{{ form_widget(form.save,{'attr':{'class': 'button booking-confirmation-btn margin-top-40 margin-bottom-65' }}) }}
+
+					    {{ form_rest(form) }}
+					    
+					{{ form_end(form) }}
+					
+				</div>
+
+			</div>
+
 		</div>
-	{% endfor %}
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-0 margin-bottom-60">
+			
+			<div class="boxed-widget opening-hours summary margin-top-45">
+				<h3><i class="fa fa-calendar-check-o"></i> Détail Produit</h3>
+				<ul>
+					
+					<li>{{ 'Produit' | trans }} <span>{{ product.name }}</span></li>
+					<li>{{ 'Type' | trans }} <span>{{ product.productType.name | trans }}</span></li>
+					<li> {{ 'Description' | trans }}  <span>{{ product.description | slice(0,50) }}...</span></li>
+					<li>{{ 'Prix Unitaire' | trans }}  <span>{{ product.priceUnit }} &euro; </span></li>
+					<li> Mettre à jour <span><a href="{{ path('update_product',{'id':product.id }) }}"> {{'lien'| trans }} </a></span></li>
+					
+		
+					
+				</ul>
+
+			</div>
+
+			<div class="listing-item-container compact order-summary-widget">
+				{% for img in product.images %}
+				<div class="listing-item">
+				<img src="{{ asset('images_products/'~img.name) }}" alt=""/> 
+							
+
+				<div class="listing-item-content">
+					
+					{% if img.isStar != true %}
+					<form action="{{ path('change_product_image_star',{'imgId':img.id}) }}">
+						<input type="submit" value="Rendre vedette" class="button booking-confirmation-btn" />
+					</form>
+						
+					
+					{% endif %} 
+					
+				</div>
+				</div>
+
+				{% endfor %}
+			</div>
+
+		</div>
+
+	</div>
 </div>
- <h3> {{ product.productType.name }} </h3>
-<div class="item">
-	{{ product.name }} <br/>
-	<p>{{ product.description }} </p>
-	{{ product.priceUnit }} euro(s)<br/>
-	<a href="{{ path('update_product',{'id':product.id }) }}"> Mettre à jour </a> <br/>
-</div>
 
-<h3>Ajouter une image</h3>
-{{ form_start(form, {'method': 'post', 'action': path('add_product_image',{'id':product.id}) }) }}
-
-                
-    {{ form_rest(form) }}
-    
-{{ form_end(form) }}
+{% endblock %}
 
 
+
+{% block javascripts %}
+{{ parent() }}
+
+<script type="text/javascript">
+  var $collectionHolder;
+
+	// setup an "add a tag" link
+	var $addImgButton = $('<button type="button" class="add_img_link">Ajouter une image</button>');
+	var $newLinkLi = $('<li></li>').append($addImgButton);
+
+	$(document).ready(function() {
+		    // Get the ul that holds the collection of tags
+		    $collectionHolder = $('ul.images');
+
+		    // add the "add a tag" anchor and li to the tags ul
+		    $collectionHolder.append($newLinkLi);
+
+		    // count the current form inputs we have (e.g. 2), use that as the new
+		    // index when inserting a new item (e.g. 2)
+		    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+		    $addImgButton.on('click', function(e) {
+		        // add a new tag form (see next code block)
+		        addImgForm($collectionHolder, $newLinkLi);
+		    });
+	});
+
+	function addImgForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    var newForm = prototype;
+    // You need this only if you didn't set 'label' => false in your tags field in TaskType
+    // Replace '__name__label__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    // newForm = newForm.replace(/__name__label__/g, index);
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    newForm = newForm.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $("<li></li>").append(newForm);
+    $newLinkLi.before($newFormLi);
+}
+</script>
+
+<script type="text/javascript">
+	$("input[type=checkbox]").on("click",function(){
+		$("input[type=checkbox]").prop('checked',false);
+		$(this).prop('checked',true);
+	})
+
+</script>
 
 {% endblock %}

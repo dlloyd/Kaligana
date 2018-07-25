@@ -29,22 +29,29 @@ class ReservationController extends Controller
         if(!$prod || !$prod->getIsHidden()){
 
     	if($prod->getProductType()->getName()=="Activity"){
-    		$form = $this->activityForm($resa);
+    		$form = $this->activityForm($resa,$productId);
     	}
     	else{
-    		$form = $this->carLodgmentForm($resa);
+    		$form = $this->carLodgmentForm($resa,$productId);
     	}
 
     	$form->HandleRequest($req);
         if($form->isSubmitted() && $form->isValid()){
     		//add reservation to session
     		$session = $req->getSession();
-    		if($session->has('reservation')){
-    			$session->remove('reservation');
+    		if($session->has('reservations')){
+                $reservations = $session->get('reservations');
+                array_push($reservations, $form->getData()) ;
+    			$session->set('reservations',$reservations);
     		}
-    		$session->set('reservation',$form->getData());
+            else{
+                $reservations = array();
+                array_push($reservations, $form->getData());
+                $session->set('reservations',$reservations);
+            }
+    		
 
-    		return $this->redirectToRoute('validate_payment_reservation',array('productId'=> $productId,));
+    		return $this->redirectToRoute('validate_payment_reservation');
            
         }
 
@@ -56,44 +63,29 @@ class ReservationController extends Controller
     }
 
 
-    /*
-    public function validatePaymentReservationAction(Request $req,$productId){
-    	
-    	//if payment accepted create reservation and send mail with all informations
-    	//remove reservation from session
-    	//redirect to bill page
-    	//else redirect to payment page with error payment
-        $em = $this->getDoctrine()->getManager();
-        $prod = $em->getRepository('AppBundle:Product')->find($productId);
-        $session = $req->getSession();
-        
-        if(!$session->has('reservation')){
-            return $this->redirectToRoute('homepage');
-        }
-        $resa = $this->createNewReservation($session->get('reservation'),$prod);
-        $em->persist($resa);
-        $em->flush();
-
-        $amount = $resa->getQuantity()* $resa->getProduct()->getPriceUnit();
-
-        return $this->render('payment/success.html.twig',array('reservation'=>$resa,'amount'=>$amount,));
-
-    }*/
 
     /**
-     * @Route("/reservation/validation/{productId}",requirements={"productId" = "\d+"}, name="validate_payment_reservation")
+     * @Route("/reservation/validation/", name="validate_payment_reservation")
      */
-    public function paymentAction(Request $req,$productId){
+    public function paymentAction(Request $req){
         $em = $this->getDoctrine()->getManager();
-        $prod = $em->getRepository('AppBundle:Product')->find($productId);
+        $resaAmount = array();
+        
         $session = $req->getSession();
         
-        if(!$session->has('reservation')){
+        if(!$session->has('reservations')){
             return $this->redirectToRoute('homepage');
         }
         else{
-          $resaSession = $session->get('reservation');
-          $amount = $resaSession['quantity']*$prod->getPriceUnit();  
+          $resasSession = $session->get('reservations');
+          $amount = 0;
+          foreach ($resasSession as $resa) {
+              $prod = $em->getRepository('AppBundle:Product')->find($resa['productId']);
+              $resaAmount[$prod->getId()] =  $resa['quantity']*$prod->getPriceUnit();
+              $resaProduct[$prod->getId()] = $prod;
+              $amount += $resaAmount[$prod->getId()];
+          }
+            
           $form = $this->paymentForm();
          
           if ($req->isMethod('POST')) {
@@ -111,7 +103,7 @@ class ReservationController extends Controller
                   'receipt_email' => $form->get('email')->getData()
                 ));
 
-                $resa = $this->createNewReservation($resaSession,$prod);
+                $resa = $this->createNewReservation($resasSession);
                 $em->persist($resa);
                 $em->flush();
 
@@ -131,8 +123,9 @@ class ReservationController extends Controller
           'form' => $form->createView(),
           'stripe_public_key' => $this->getParameter('stripe_public_key'),
           'amount' => $amount,
-          'product' => $prod,
-          'reservation'=>$resaSession,
+          'resaAmount' => $resaAmount,
+          'resaProduct' => $resaProduct,
+          'reservations'=>$resasSession,
         ]);
         }
     }
@@ -164,12 +157,35 @@ class ReservationController extends Controller
     /**
      * @Route("/resa/sess/remove/}", name="remove_reservation_session")
      */
-    public function removeSessionReservationAction(Request $req){
+    public function removeSessionReservationsAction(Request $req){
         $session = $req->getSession();
-        if($session->has('reservation')){
-            $session->remove('reservation');
+        if($session->has('reservations')){
+            $session->remove('reservations');
         }
         return $this->redirectToRoute('homepage');
+
+    }
+
+    /**
+     * @Route("/resa/sess/remove/prod/{id}}",requirements={"id" = "\d+"}, name="remove_reservation_product")
+     */
+    public function removeSessionReservationProductAction(Request $req,$id){
+        $session = $req->getSession();
+        if($session->has('reservations')){
+            $newReservations = array();
+            foreach ($session->get('reservations') as $resa) {
+                if($resa['productId'] != $id){
+                    array_push($newReservations,$resa);
+                }
+            }
+            $session->set('reservations',$newReservations);
+            if(empty($newReservations)){
+                $session->remove('reservations');
+            }
+
+            
+        }
+        return $this->redirectToRoute('validate_payment_reservation');
 
     }
 
@@ -180,14 +196,20 @@ class ReservationController extends Controller
     	return null;
     }
 
-    public function activityForm($resa){
+    public function activityForm($resa,$productId){
         return $this->createFormBuilder($resa)
-            ->add('quantity', IntegerType::class)
+            ->add('quantity', IntegerType::class,array('data'=>1))
+            ->add('productId', HiddenType::class,array(
+                    'data' =>$productId,
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
             ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
             ->getForm();
     }
 
-    public function carLodgmentForm($resa){
+    public function carLodgmentForm($resa,$productId){
         return $this->createFormBuilder($resa)
             ->add('manyDays', CheckboxType::class, array(
                     'label'    => 'Plusieurs jours ?',
@@ -219,13 +241,19 @@ class ReservationController extends Controller
                     'readonly' => true,
                     'hidden' => true,
             ),))
+            ->add('productId', HiddenType::class,array(
+                    'data' =>$productId,
+                    'attr' => array(
+                    'readonly' => true,
+                    'hidden' => true,
+            ),))
             ->add('save', SubmitType::class, array('disabled'=>true,'label' => 'Réserver'))
             ->getForm();
 
     }
 
 
-    public function createNewReservation($resaSession,$product){
+    public function createNewReservation($resasSession){
         $resa = new Reservation();
         $resa->setProduct($product);
         $resa->setDateBegin(new \Datetime($resaSession['dateBegin']));
@@ -247,7 +275,7 @@ class ReservationController extends Controller
           ->add('token', HiddenType::class, [
             'constraints' => [new Assert\NotBlank()],
           ])
-          ->add('submit', SubmitType::class, array('label' => 'Payer'))
+          ->add('submit', SubmitType::class, array('label' => 'Confirmer et Payer'))
           ->getForm();
     }
 

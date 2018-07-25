@@ -3,53 +3,149 @@
 {% block body %}
 
 
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
 
-<div class="form-group" >
-	<h3>Informations:</h3>
+				<h2>Réservation</h2>
 
-	{{ 'Nom' | trans }} : {{ product.name }} <br/>
-	{{ 'Description' | trans }} : {{ product.description }} <br/>
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href=" {{ path('homepage') }} ">Accueil</a></li>
+						<li>Réservation</li>
+					</ul>
+				</nav>
 
-	{% if app.request.locale == 'fr' %}
-		{{ 'Date début' | trans }} : {{reservation.dateBegin |date('d/m/Y')}} <br/>
-		{{ 'Date fin' | trans }} : {{reservation.dateEnd |date('d/m/Y')}} <br/>
-
-	{% else %}
-		{{ 'Date début' | trans }} : {{reservation.dateBegin |date('Y-m-d')}} <br/>
-		{{ 'Date fin' | trans }} : {{reservation.dateEnd |date('Y-m-d')}} <br/>
-	{% endif %}
-	{{ 'Prix' | trans }} :  {{ reservation.quantity }} x {{ product.priceUnit }} euro(s) <br/>
-	{{ 'Montant Total'|trans }}: {{ amount }} euro(s) <br/>
-	<a href="{{ path('remove_reservation_session') }}"> {{'Annuler'| trans }} </a> <br/>
-	
-  
-  
-  
-</div>
-<br/><br/>
-
-<h3>{{ 'Paiement' | trans }}:</h3>
-{{ form_start(form, {attr: {id: form.vars.id}}) }}
-
-{{ form_widget(form.token) }}
-
-{{ form_label(form.firstname,'Prénom client') }} : {{ form_widget(form.firstname) }} <br/>
-
-{{ form_label(form.lastname,'Nom client') }} : {{ form_widget(form.lastname) }} <br/>
-
-{{ form_label(form.email,'Email') }} : {{ form_widget(form.email) }} <br/> <br/>
-<div class="form-group" style="width: 30%;">
-	
-  <label for="card-element">
-    Credit or Debit Card
-  </label>
-  <div id="card-element" class="form-control"></div>
-  <div id="card-errors" class="help-block" role="alert"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
-{{ form_rest(form) }}
 
-{{ form_end(form) }}
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+
+		<!-- Content
+		================================================== -->
+		<div class="col-lg-8 col-md-8 padding-right-30">
+			{{ form_start(form, {attr: {id: form.vars.id}}) }}
+
+				{{ form_widget(form.token) }}
+
+			<h3 class="margin-top-0 margin-bottom-30">Détails personnels</h3>
+
+			<div class="row">
+
+				<div class="col-md-6">
+					{{ form_label(form.firstname,'Prénom client') }}
+					{{ form_widget(form.firstname) }}
+				</div>
+
+				<div class="col-md-6">
+					{{ form_label(form.lastname,'Nom client') }}
+					{{ form_widget(form.lastname) }}
+				</div>
+
+				<div class="col-md-6">
+					<div class="input-with-icon medium-icons">
+						{{ form_label(form.email,'Email') }}
+						{{ form_widget(form.email) }}
+						<i class="im im-icon-Mail"></i>
+					</div>
+				</div>
+
+				
+
+			</div>
+
+
+			<h3 class="margin-top-55 margin-bottom-30">Mode de paiement</h3>
+
+			<!-- Payment Methods Accordion -->
+			<div class="payment">
+				
+				<div class="payment-tab payment-tab-active">
+					<div class="payment-tab-trigger">
+						<label for="card-element">Credit / Debit Card</label>
+						<img class="payment-logo" src="https://i.imgur.com/IHEKLgm.png" alt="">
+					</div>
+
+					<div class="payment-tab-content">
+						<div class="row">
+			
+						  <div id="card-element" class="form-control"></div>
+						  <div id="card-errors" class="help-block" role="alert"></div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- Payment Methods Accordion / End -->
+
+			{{ form_widget(form.submit,{'attr':{'class': 'button booking-confirmation-btn margin-top-40 margin-bottom-65' }}) }}
+		
+			
+
+			{{ form_rest(form) }}
+
+			{{ form_end(form) }}
+		</div>
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-0 margin-bottom-60">
+			
+			<div class="boxed-widget opening-hours summary margin-top-0">
+				<h3><i class="fa fa-calendar-check-o"></i> Détail réservation</h3>
+				<ul>
+				{% for reservation in reservations %}
+			
+						<li> Type <span>{{ resaProduct[reservation.productId].productType.name | trans }}</span> </li>
+						<li> Nom  <span> {{ resaProduct[reservation.productId].name  }}  </span> </li>
+						{% if app.request.locale == 'fr' %}
+						<li>{{ 'Date début' | trans }} <span>{{reservation.dateBegin |date('d/m/Y')}}</span></li>
+						<li> {{ 'Date fin' | trans }}  <span>{{reservation.dateEnd |date('d/m/Y')}}</span></li>
+						<li>{{ 'Nombre de jours' | trans }}  <span> {{ reservation.quantity }} </span></li>
+
+			
+						{% else %}
+
+						<li>{{ 'Date début' | trans }} <span>{{reservation.dateBegin |date('Y-m-d')}}</span></li>
+						<li> {{ 'Date fin' | trans }}  <span>{{reservation.dateEnd |date('Y-m-d')}}</span></li>
+						<li>{{ 'Nombre de jours' | trans }}  <span> {{ reservation.quantity }} </span></li>
+
+						{% endif %}
+						
+						<li >Montant <span>{{ resaAmount[reservation.productId] }} &euro;</span></li>
+						<li> Supprimer <span><a href="{{ path('remove_reservation_product',{'id': reservation.productId }) }}"> {{'ici'| trans }} </a></span></li>
+						<div style="border-bottom: 1px solid rgba(0,0,0,0.09);"></div><br/>
+					
+
+				
+				{% endfor %}
+
+				<li class="total-costs">Montant Total <span>{{ amount }} &euro;</span></li>
+						<li> Annuler <span><a href="{{ path('remove_reservation_session') }}"> {{'ici'| trans }} </a></span></li>
+				</ul>
+			</div>
+
+			
+			<!-- Booking Summary / End -->
+
+		</div>
+
+	</div>
+</div>
 
 {% endblock %}
 
@@ -93,3 +189,6 @@
 	</script>
 
 {% endblock %}
+
+
+

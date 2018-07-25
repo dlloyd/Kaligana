@@ -61,7 +61,7 @@ class Product
     private $durationNumber;  
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="product", cascade={"persist"})
     */
     private $images;
 

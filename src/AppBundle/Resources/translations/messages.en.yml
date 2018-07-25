@@ -5,12 +5,15 @@ Voitures: Cars
 Prix: Price
 Logements: Lodgments
 Activités: Activities
-Montant Total: Total Amount
+Montant Total: Total Cost
 Plusieurs jours ?: Many days?
 Nom: Name
-Nom client: Customer lastname
-Prénom client: Customer firstname
+Nom client: Last name
+Prénom client: First name
 Réserver: Book
+Réservation: Booking
+Détails réservation: Booking summary
+Détails personnels: Personal Details
 Détails: Details
 Date début: Date begin
 Date fin: Date end
