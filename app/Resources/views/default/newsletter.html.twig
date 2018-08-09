@@ -1,0 +1,15 @@
+
+{{ form_start(form, {'attr': {'id': 'form_newsletter'},'method': 'post', 'action': path('save_email_in_newsletter') }) }}
+	
+	<div id="news" class="row">
+        <div class="col-md-6">
+         {{ form_widget(form.email, { 'attr': {'placeholder': 'Votre email..'|trans} }) }}
+        </div>
+        <div class="col-md-6" style="margin-top: 8px;">
+         {{ form_widget(form.save) }}
+        </div>
+             
+    {{ form_rest(form) }}
+	</div>
+    
+{{ form_end(form) }}

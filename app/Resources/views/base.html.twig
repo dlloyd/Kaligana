@@ -113,7 +113,7 @@
                     <ul id="responsive">
 
                         <li><a href="{{ path('homepage') }}">  {{ 'Accueil' | trans }} </a></li>
-                        <li><a href="#">  {{ 'Qui sommes-nous?' | trans }} </a></li>
+                        <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous?' | trans }} </a></li>
                         <li><a href="#"> Nos services </a>
                         <ul>
                             <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
@@ -192,13 +192,7 @@
                 <br><br>
                 <p>Retrouvez nos derniers articles sur <a href="#"> <u> Kaligana blog </u>  </a> .<br/>
                 Reçevez régulièrement les news de Kaligana en vous inscrivant à notre newsletter.</p>
-                <form>
-                    <div class="row">
-                        <div class="col-md-6"> <input type="email" name="newsletter" placeholder="Votre email.." /></div>
-                        <div class="col-md-6" style="margin-top: 8px;"> <button> Envoyer </button> </div>
-                    </div>
-                    
-                </form><br/>
+                {{ render(controller('AppBundle:Default:newsletter')) }} <br/>
             </div>
 
             <div class="col-md-4 col-sm-6 ">
@@ -220,7 +214,7 @@
                 <div class="text-widget">
                     <span>4 rue du port , 33000 BORDEAUX</span> <br>
                     Phone: <span>(+33)6 45 35 89 </span><br>
-                    E-Mail:<span> <a href="#">kaligana@example.com</a> </span><br>
+                    E-Mail:<span> <a href="#" onclick="return false;">kaligana@example.com</a> </span><br>
                 </div>
 
                 <ul class="social-icons margin-top-20">
@@ -275,7 +269,32 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
 <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
+
+<script type="text/javascript">
+   
+    $('body').on('submit', '#form_newsletter', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize()
+        })
+        .done(function (data) {
+            swal("Félicitations!", "Vous êtes maintenant enregistré à la newsletter!", "success");
+            $( "#news" ).hide();
+            
+        })
+        .fail(function (data) {
+            swal("Ouch!", "Une erreur est survenu, vous êtes peut-être déjà enregistré", "error");
+ 
+        });
+    });
+</script>
+
 
 {% endblock %}
 

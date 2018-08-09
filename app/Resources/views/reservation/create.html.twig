@@ -12,7 +12,7 @@
 </ul>
 {%endif%}
 
-{{ form_start(form, {'method': 'post', 'action': path('create_reservation',{productId: id }) }) }}
+{{ form_start(form, {'attr': {'id': 'form_resa'},'method': 'post', 'action': path('create_reservation',{productId: id }) }) }}
 
     <div id="resa">
      {% if form.dateRange is defined %}
