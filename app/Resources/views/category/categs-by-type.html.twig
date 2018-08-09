@@ -1,0 +1,26 @@
+<div class="col-md-12">
+			<div class="main-search-input gray-style margin-top-0 margin-bottom-10">
+
+				
+				<div class="main-search-input-item">
+					<select data-placeholder="All Categories" class="chosen-select" id="categ-search" >
+				
+						<option value="{{ path('products_by_type',{'code': code,'page':1}) }}"> Toutes catégories</option>
+						{% for category in categories %}
+							<option value="{{ path('products_by_category',{'id':category.id}) }}"> {{ category.name }}</option>
+						{% endfor %}	
+					</select>
+				</div>
+
+				<button class="button" onclick="getCategory()">Search</button>
+			</div>
+</div>
+
+<script type="text/javascript">
+	
+	function getCategory(){
+		var e = document.getElementById('categ-search');
+		var selected = e.options[e.selectedIndex].value;
+		window.location = selected;
+	}
+</script>

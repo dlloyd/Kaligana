@@ -16,7 +16,7 @@
 			<li data-index="rs-1" data-transition="fade" data-slotamount="default"  data-easein="Power4.easeInOut" data-easeout="Power4.easeInOut" data-masterspeed="1000"  data-rotate="0"  data-fstransition="fade" data-fsmasterspeed="800" data-fsslotamount="7" data-saveperformance="off">
 
 				<!-- Background -->
-				<img src="images/cascade.jpg" alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0">
+				<img src="{{asset('images/cascade.jpg')}}" alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0">
 
 				<!-- Caption-->
 				<div class="tp-caption custom-caption-2 tp-shape tp-shapewrapper tp-resizeme rs-parallaxlevel-0" 
@@ -57,7 +57,7 @@
 					data-responsive="off"
 					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">Voitures</div>
 
-					<div class="caption-text">un texte sur les voitures</div>
+					<div class="caption-text">Sélectionnez votre voiture pour être autonome <br/> durant votre séjour</div>
 					<a href="#" class="button medium">Découvrir</a>
 
 
@@ -73,7 +73,7 @@
 			<li data-index="rs-2" data-transition="fade" data-slotamount="default"  data-easein="Power4.easeInOut" data-easeout="Power4.easeInOut" data-masterspeed="1000"  data-rotate="0"  data-fstransition="fade" data-fsmasterspeed="800" data-fsslotamount="7" data-saveperformance="off">
 
 				<!-- Background -->
-				<img src="images/house.jpg"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="112" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0"> 
+				<img src="{{asset('images/house.jpg')}}"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="112" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0"> 
 
 				<!-- Caption-->
 				<div class="tp-caption centered custom-caption-2 tp-shape tp-shapewrapper tp-resizeme rs-parallaxlevel-0" 
@@ -113,7 +113,7 @@
 					data-responsive="off"
 					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">Logements</div>
 
-					<div class="caption-text">un texte sur les logements</div>
+					<div class="caption-text">Choisissez votre logement idéal</div>
 					<a href="#" class="button medium">Découvrir</a>
 				</div>
 
@@ -124,7 +124,7 @@
 			<li data-index="rs-2" data-transition="fade" data-slotamount="default"  data-easein="Power4.easeInOut" data-easeout="Power4.easeInOut" data-masterspeed="1000"  data-rotate="0"  data-fstransition="fade" data-fsmasterspeed="800" data-fsslotamount="7" data-saveperformance="off">
 
 				<!-- Background -->
-				<img src="images/paysage.jpg"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="112" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0"> 
+				<img src="{{asset('images/paysage.jpg')}}"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina data-kenburns="on" data-duration="12000" data-ease="Linear.easeNone" data-scalestart="100" data-scaleend="112" data-rotatestart="0" data-rotateend="0" data-offsetstart="0 0" data-offsetend="0 0"> 
 
 				<!-- Caption-->
 				<div class="tp-caption centered custom-caption-2 tp-shape tp-shapewrapper tp-resizeme rs-parallaxlevel-0" 
@@ -159,8 +159,8 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h2 class="headline centered margin-top-80" >
-				Appropriez-vous Votre Voyage comme il se doit. 
-				<span class="margin-top-25" style="font-style: italic;text-transform: lowercase;">Kaligana vous accompagne dans la personnalisation de votre voyage à la caraïbe grâce à ses partenaires locaux et éthiques.</span>
+				Appropriez-vous Votre Voyage <br/> comme il se doit. 
+				<span class="margin-top-25" style="font-size: 57%; font-style: italic;text-transform: lowercase;"><span style="text-transform: uppercase;display: inline;">K</span>aligana vous accompagne dans la personnalisation de votre voyage aux Caraïbes grâce à ses partenaires locaux et éthiques.</span>
 			</h2>
 		</div>
 	</div>
@@ -182,7 +182,7 @@
 		<div class="col-md-4">
 
 			<!-- Image Box -->
-			<a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}" class="img-box" data-background-image="images/house.jpg">
+			<a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}" class="img-box" data-background-image="{{asset('images/house.jpg')}}">
 				<div class="img-box-content visible">
 					<h4>LOGEMENTS </h4>
 					
@@ -194,7 +194,7 @@
 		<div class="col-md-8">
 
 			<!-- Image Box -->
-			<a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}" class="img-box" data-background-image="images/car.jpg">
+			<a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}" class="img-box" data-background-image="{{asset('images/car.jpg')}}">
 				<div class="img-box-content visible">
 					<h4>LOCATION VOITURES</h4>
 					
@@ -206,7 +206,7 @@
 		<div class="col-md-8">
 
 			<!-- Image Box -->
-			<a href="#" onclick="return false;" class="img-box" data-background-image="images/plonge.jpg">
+			<a href="#" onclick="return false;" class="img-box" data-background-image="{{asset('images/plonge.jpg')}}">
 				<div class="listing-badge now-closed">à venir</div>
 				<div class="img-box-content visible">
 					<h4>activités</h4>
@@ -225,7 +225,7 @@
 <div class="container" >
 	<h3 class="headline centered margin-bottom-35 margin-top-70">le concept de kaligana </h3>
 	<div style="margin-left: 7%;font-size: 120%" >
-		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Première plateforme e-tourisme spécial Caraïbes <br/>
+		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Première plateforme e-tourisme 100% Caraïbes <br/>
 		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Liberté totale dans la planification de votre séjour <br/> 
 		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> 100% responsable et solidaire avec les acteurs du tourisme local <br/>
 		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Une démarche éthique et eco-friendly <br/>
@@ -245,7 +245,7 @@
 			<li>Paiement sécurisé avec Stripe  </li>
 		</ul>
 	</div> <br/><br/>
-	<div align="center" ><a href="#" class="button" style="padding: 2% 11%;font-size: 150%;">Potentiel partenaire ? </a></div><br/>
+	<div align="center" ><a href="#" class="button" style="padding: 2% 11%;font-size: 150%;">devenir partenaire de Kaligana </a></div><br/>
 </div>
 
 <!-- Container / End -->
@@ -261,8 +261,8 @@
  {{ parent() }}
 
 <!-- REVOLUTION SLIDER SCRIPT -->
-<script type="text/javascript" src="scripts/themepunch.tools.min.js"></script>
-<script type="text/javascript" src="scripts/themepunch.revolution.min.js"></script>
+<script type="text/javascript" src="{{asset('scripts/themepunch.tools.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('scripts/themepunch.revolution.min.js')}}"></script>
 
 <script type="text/javascript">
 	var tpj=jQuery;			
@@ -273,10 +273,10 @@
 		}else{
 			revapi4 = tpj("#rev_slider_4_1").show().revolution({
 				sliderType:"standard",
-				jsFileLocation:"scripts/",
+				jsFileLocation:"{{ asset('scripts/') }}",
 				sliderLayout:"auto",
 				dottedOverlay:"none",
-				delay:4000,
+				delay:3000,
 				navigation: {
 					keyboardNavigation:"off",
 					keyboard_direction: "horizontal",

@@ -377,28 +377,4 @@ class Product
     }
 
     
-
-    /**
-     * Set category
-     *
-     * @param \AppBundle\Entity\ProductCategory $category
-     *
-     * @return Product
-     */
-    public function setCategory(\AppBundle\Entity\ProductCategory $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \AppBundle\Entity\ProductCategory
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
 }

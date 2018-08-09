@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
 
 <!-- Basic Page Needs
@@ -14,6 +15,8 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}"/>
 <link rel="stylesheet" href="{{ asset('css/colors/navy.css') }}" id="colors">
+{% block head %}
+{% endblock %}
 
 
 <style type="text/css">
@@ -50,11 +53,14 @@
     .StripeElement--webkit-autofill {
       background-color: #fefde5 !important;
     }
+
+
 </style>
 
 
 
 </head>
+
 
 <body>
    
@@ -89,7 +95,7 @@
                 
                 <!-- Logo -->
                 <div id="logo">
-                    <a href="{{ path('homepage') }}"><img src="#" alt="">logo</a>
+                    <a href="{{ path('homepage') }}"><img src="{{ asset('images/logo.png') }} " alt=""></a>
                 </div>
 
                 <!-- Mobile Navigation -->
@@ -120,7 +126,8 @@
                 <li><a href="#">Administrateur Panel</a>
                     <ul>
                 
-                     <li><a href="{{ path('add_product') }}">ajouter produit</a> </li>
+                     <li><a href="{{ path('add_product',{'typeCode':'LOD'}) }}">ajouter logement</a> </li>
+                     <li><a href="{{ path('add_product',{'typeCode':'CAR'}) }}">ajouter voiture</a> </li>
                     <li> <a href="{{ path('show_all_reservations') }}">liste des réservations</a> </li>
                      <li><a href="{{ path('show_all_products') }}">liste des produits</a></li>
                     
@@ -147,10 +154,12 @@
                     <a href="{{ path('fos_user_security_logout') }}" class="sign-in"><i class="sl sl-icon-login"></i> se déconnecter</a>
                     
                     {% endif %}
-                    <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">Mes Réservations
+                    
                      {% if app.session.get('reservations') is null %}
+                     <a href="#" onclick="return false;" class="button border with-icon">Mes Réservations
                      <i class="sl sl-icon-plus"></i>
                      {% else %}
+                       <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">Mes Réservations
                       ( {{ app.session.get('reservations') | length }} )
                      {% endif %}
                      </a>
@@ -179,9 +188,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-5 col-sm-6">
-                <img class="footer-logo" src="#" alt="">
+                <img class="footer-logo" src="{{ asset('images/logo.png') }}" alt="">
                 <br><br>
-                <p>Morbi convallis bibendum urna ut viverra. Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper.</p>
+                <p>Retrouvez nos derniers articles sur <a href="#"> <u> Kaligana blog </u>  </a> .<br/>
+                Reçevez régulièrement les news de Kaligana en vous inscrivant à notre newsletter.</p>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6"> <input type="email" name="newsletter" placeholder="Votre email.." /></div>
+                        <div class="col-md-6" style="margin-top: 8px;"> <button> Envoyer </button> </div>
+                    </div>
+                    
+                </form><br/>
             </div>
 
             <div class="col-md-4 col-sm-6 ">
@@ -189,10 +206,10 @@
                 
 
                 <ul class="footer-links">
-                    <li><a href="#">Nos Partenaires</a></li>
                     <li><a href="#">Qui sommes-nous ?</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Nos conditions générales de vente</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">FAQ</a></li>
 
                 </ul>
                 <div class="clearfix"></div>
@@ -220,7 +237,7 @@
         <!-- Copyright -->
         <div class="row">
             <div class="col-md-12">
-                <div class="copyrights">© 2017 Listeo. All Rights Reserved.</div>
+                <div class="copyrights">© 2018 All Rights Reserved.</div>
             </div>
         </div>
 

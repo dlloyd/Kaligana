@@ -1,6 +1,40 @@
 {% extends 'base.html.twig' %}
 
+{% block head %}
+
+	<link rel="stylesheet" href="{{ asset('magnific-popup/magnific-popup.css') }}">
+
+{% endblock %}
+
 {% block body %}
+
+<div id="resa-modal" class="white-popup-block mfp-hide" style="background-color: white;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 5%;">
+	<h1>Bravo !!</h1>
+	<p>Votre réservation a bien été prise en compte! </p>
+
+
+	<p>Autres services:</p>
+	<p>
+	 {% if product.productType.code == "LOD" %}
+	 	{% if app.session.get('reservations') is null or app.session.get('resa_car') is null %}
+	 		<a class="button" href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">Voitures </a>
+	 	{% endif %}
+	 {% elseif product.productType.code == "CAR" %}
+	 	{% if app.session.get('reservations') is null or app.session.get('resa_lodgment') is null %}
+	 		<a class="button" href="{{ path('products_by_type',{'code':'LOD','page':1}) }}">Logements </a>
+	 	{% endif %}
+	 {% endif %}
+	</p>
+	<br/>
+	<p>
+		<a class="button" href="{{ path('validate_payment_reservation') }}">Passer au paiement </a>
+	</p>
+</div>
 
 <!-- Slider
 ================================================== -->
@@ -89,7 +123,7 @@
 			<!-- Book Now -->
 			<div class="boxed-widget booking-widget margin-top-35">
 				<h3><i class="fa fa-calendar-check-o "></i> Réservation</h3>
-				{{ render(controller('AppBundle:Reservation:create',{ 'productId': product.id } )) }}
+				{{ render(controller('AppBundle:Reservation:new',{ 'productId': product.id } )) }}
 
 			</div>
 			<!-- Book Now / End -->
@@ -100,16 +134,12 @@
 				<h3><i class="sl sl-icon-clock"></i> Obligatoire</h3>
 				<ul>
 					{% if product.productType.code == "CAR" %}
-						<li>Permis<span> A</span></li>
+						<li>Permis<span> Obligatoire</span></li>
 						<li>Age <span> +18 ans</span></li>
-						<li>Attribution permis <span>minimum 5 ans</span> </li>
-					{% elseif product.productType.code == "LOD" %}
-	
-						<li>Age <span> +18 ans</span></li>
-					{% elseif product.productType.code == "ACT" %}
-
+						
+					
 					{% endif %}
-						<li>Conditions générales<span> <a href="#" target="blank">voir</a></span></li>
+						<li>règlements Kaligana et du logement<span> <a href="#" target="blank">voir</a></span></li>
 					
 					
 					
@@ -132,6 +162,8 @@
 {% block javascripts %}
 
 {{ parent() }}
+
+<script src="{{ asset('magnific-popup/jquery.magnific-popup.js') }}"></script>
 
 {% if product.productType.code != "ACT" %}
 <script type="text/javascript">
@@ -232,6 +264,38 @@
 </script>
 
 {% endif %}
+
+<script type="text/javascript">
+	
+	$('body').on('submit', 'form', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize()
+        })
+        .done(function (data) {
+            $.magnificPopup.open({
+            	items:{
+		        src: '#resa-modal', 
+		        type: 'inline',
+		      	},
+		      	preloader: false,
+				focus: '#username',
+				modal: true	
+             });
+            
+        })
+        .fail(function (data) {
+            alert('error');
+ 
+        });
+    });
+</script>
+
+
 
 
 {% endblock %}

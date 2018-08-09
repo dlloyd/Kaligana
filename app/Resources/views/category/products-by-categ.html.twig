@@ -10,13 +10,14 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2>{{ title|trans }}</h2><span>Liste de nos {{ title|trans }}</span>
+				<h2>{{ title|trans }}</h2><span> {{ category.name }} </span>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
 					<ul>
 						<li><a href="{{ path('homepage') }}">Accueil</a></li>
-						<li>{{ title | trans }}</li>
+						<li><a href="{{ path('products_by_type',{'code':category.code}) }}">Toutes catégories </a></li>
+						<li>{{ category.name }}</li>
 					</ul>
 				</nav>
 
@@ -32,7 +33,8 @@
 	<div class="row">
 		
 		<!-- Search -->
-		{{ render(controller('AppBundle:Product:categoriesByType',{ 'typeCode': code } )) }}
+		
+		{{ render(controller('AppBundle:Product:categoriesByType',{ 'typeCode': category.code } )) }}
 		<!-- Search Section / End -->
 
 
@@ -80,7 +82,7 @@
 			</div>
 
 			
-			{% include 'product/pagination.html.twig' %}
+			
 
 		</div>
 

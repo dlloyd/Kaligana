@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -11,36 +12,69 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Reservation;
 
 
 class ReservationController extends Controller
 {
+    /**
+     * @Route("/new/reservation/{productId}",requirements={"productId" = "\d+"}, name="new_reservation")
+     * @Method("GET")
+     */
+    public function newAction(Request $req,$productId){
+
+        $em = $this->getDoctrine()->getManager();
+        $prod = $em->getRepository('AppBundle:Product')->find($productId);
+
+        if(!$prod || $prod->getIsHidden()){
+            throw $this->createNotFoundException('Produit supprimé ou inexistant');
+        }
+        else{
+            $form = $this->reservationForm($prod);
+            
+        return $this->render('reservation/create.html.twig',array('form' => $form->createView(),'id'=>$productId));
+        }
+   
+    }
+
 	/**
      * @Route("/create/reservation/{productId}",requirements={"productId" = "\d+"}, name="create_reservation")
+     * @Method("POST")
      */
     public function createAction(Request $req,$productId){
+        if (!$req->isXmlHttpRequest()) {
+            return new JsonResponse(array('message' => 'Uniquement requête Ajax'), 400);
+        }
 
     	$em = $this->getDoctrine()->getManager();
-        $resa = array();
+        
     	$prod = $em->getRepository('AppBundle:Product')->find($productId);
 
-        if(!$prod || !$prod->getIsHidden()){
-
-    	if($prod->getProductType()->getName()=="Activity"){
-    		$form = $this->activityForm($resa,$productId);
-    	}
-    	else{
-    		$form = $this->carLodgmentForm($resa,$productId);
-    	}
+        if(!$prod || $prod->getIsHidden()){
+            throw $this->createNotFoundException('Produit supprimé ou inexistant');
+        }
+        else{
+            $form = $this->reservationForm($prod);
+        }
 
     	$form->HandleRequest($req);
         if($form->isSubmitted() && $form->isValid()){
     		//add reservation to session
     		$session = $req->getSession();
+            
     		if($session->has('reservations')){
-                $reservations = $session->get('reservations');
+                $resas = $session->get('reservations');
+                $reservations = array();
+                /* Vérifie si une resa du meme service existe, si c'est le cas il la supprime */
+                foreach ($resas as $resa) {
+                    $resa_prod = $em->getRepository('AppBundle:Product')->find($resa['productId']);
+                    if($resa_prod->getProductType()->getId() != $prod->getProductType()->getId()){
+                        array_push($reservations, $resa) ;
+                    }
+                }
+                
                 array_push($reservations, $form->getData()) ;
     			$session->set('reservations',$reservations);
     		}
@@ -50,16 +84,19 @@ class ReservationController extends Controller
                 $session->set('reservations',$reservations);
             }
     		
+            /* Permet de savoir si un service a déja une réservation */
+            if($prod->getProductType()->getCode()=="LOD"){
+                $session->set('resa_lodgment',true);
+            }
+            elseif ($prod->getProductType()->getCode()=="CAR") {
+                $session->set('resa_car',true);
+            }
+            /* fin */
 
-    		return $this->redirectToRoute('validate_payment_reservation');
-           
+    		return new JsonResponse(array('message' => 'Success!'), 200);    
         }
 
-    	return $this->render('reservation/create.html.twig',array('form' => $form->createView(),'id'=>$productId));
-        }
-        else{
-            return $this->render('reservation/create.html.twig',array('error'=>"Produit supprimé ou inexistant"));
-        }
+        return new JsonResponse(array('error' => 'Erreur formulaire'), 400);
     }
 
 
@@ -249,6 +286,17 @@ class ReservationController extends Controller
             ),))
             ->add('save', SubmitType::class, array('disabled'=>true,'label' => 'Réserver'))
             ->getForm();
+
+    }
+
+    public function reservationForm($prod){
+        $resa = array();
+        if($prod->getProductType()->getName()=="Activity"){
+            return $this->activityForm($resa,$prod->getId());
+        }
+        else{
+            return $this->carLodgmentForm($resa,$prod->getId());
+        }
 
     }
 

@@ -20,6 +20,7 @@ class ProductType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
         $builder
             ->add('name',TextType::class)
             ->add('description',TextareaType::class, array(
@@ -31,8 +32,10 @@ class ProductType extends AbstractType
                     'Jour(s)' => 'day',
                     'Heure(s)' => 'hour',
                 ),))
-            ->add('productType', EntityType::class, array(
-                    'class' => 'AppBundle:ProductType',
+            ->add('category', EntityType::class, array(
+                    'required'=> false,
+                    'class' => 'AppBundle:ProductCategory',
+                    'choices' => $options['categories'],
                     'choice_label' => 'name',
                     'multiple' => false ))
             ->add('save', SubmitType::class, array('label' => 'Enregistrer'));
@@ -45,7 +48,8 @@ class ProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Product'
+            'data_class' => 'AppBundle\Entity\Product',
+            'categories' => null,
         ));
     }
 

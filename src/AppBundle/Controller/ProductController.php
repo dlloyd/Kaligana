@@ -26,7 +26,7 @@ class ProductController extends Controller
 
     	//verify type exists
     	if(!$type){
-    		return $this->redirectToRoute('homepage');
+    		throw $this->createNotFoundException('service inexistant');
     	}
 
     	$nbProductsByPage = $this->container->getParameter('front_nb_products_by_page');
@@ -44,7 +44,41 @@ class ProductController extends Controller
         );
 
         return $this->render('product/products-by-type.html.twig',
-        	array('products'=>$prods,'pagination'=>$pagination,'title'=>$title,));
+        	array('products'=>$prods,'pagination'=>$pagination,'title'=>$title,'code'=>$code,));
+    }
+
+
+    /**
+     * @Route("/products/categ/{id}",requirements={"id" = "\d+"}, name="products_by_category")
+     */
+    public function productsByCategoryAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $categ = $em->getRepository('AppBundle:ProductType')->find($id);
+
+        //verify type exists
+        if(!$categ){
+            throw $this->createNotFoundException('catégorie inexistante');
+        }
+
+        $title = $categ->getName();
+
+        $prods = $em->getRepository('AppBundle:Product')->findBy(['category'=>$categ]);
+
+        return $this->render('category/products-by-categ.html.twig',
+            array('products'=>$prods,'title'=>$title,));
+    }
+
+    /**
+     * @Route("/categ/{typeCode}", name="categories_by_type")
+     */
+    public function categoriesByTypeAction($typeCode)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $categs = $em->getRepository('AppBundle:ProductCategory')->findBy(['code'=>$typeCode]);
+
+        return $this->render('category/categs-by-type.html.twig',
+            array('categories'=>$categs,'code'=>$typeCode,));
     }
 
 
@@ -80,11 +114,22 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/admin/add/prod", name="add_product")
+     * @Route("/admin/add/prod/{typeCode}", name="add_product")
      */
-    public function addProductAction(Request $req){
+    public function addProductAction(Request $req,$typeCode){
+        $em = $this->getDoctrine()->getManager();
+        $type = $em->getRepository('AppBundle:ProductType')->findOneBy(array('code'=>$typeCode));
+
+        //verify type exists
+        if(!$type){
+            throw $this->createNotFoundException('service inexistant');
+        }
+
+        $categories = $em->getRepository('AppBundle:ProductCategory')->findBy(array('code'=>$typeCode));
+
     	$prod = new Product();
-    	$form = $this->createForm(ProductType::class, $prod);
+        $prod->setProductType($type);
+    	$form = $this->createForm(ProductType::class, $prod,array('categories' =>$categories ));
     	$form->HandleRequest($req);
     	if($form->isSubmitted() && $form->isValid()){
            $em = $this->getDoctrine()->getManager();
@@ -96,7 +141,7 @@ class ProductController extends Controller
         }
 
         return $this->render('product/new.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView(),'type'=> $type,
         ));
 
     }
@@ -272,7 +317,7 @@ class ProductController extends Controller
     			break;
     		
     		default:
-    			# code...
+    			$title = '';
     			break;
     	}
     	return $title;

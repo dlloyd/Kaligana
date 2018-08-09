@@ -22,13 +22,13 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2><i class="sl sl-icon-plus"></i> Ajouter produit</h2>
+				<h2><i class="sl sl-icon-plus"></i> Ajouter {{ type.name | trans}}</h2>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
 					<ul>
 						<li><a href="{{ path('homepage') }}">Accueil</a></li>
-						<li>Ajouter produit</li>
+						<li>Ajouter {{ type.name | trans }} </li>
 					</ul>
 				</nav>
 
@@ -51,7 +51,7 @@
 				
 
 				<div id="add-listing" class="separated-form">
-					{{ form_start(form, {'method': 'post', 'action': path('add_product') }) }}
+					{{ form_start(form, {'method': 'post', 'action': path('add_product',{'typeCode': type.code }) }) }}
 					<!-- Section -->
 					<div class="add-listing-section">
 
@@ -82,8 +82,8 @@
 									
 								</div>
 								<div class="col-md-6">
-									<h5>{{ form_label(form.productType,'Type produit') }}</h5>
-									{{ form_widget(form.productType,{'attr':{'class': 'chosen-select-no-single' }}) }}
+									<h5>{{ form_label(form.category,'Catégorie') }}</h5>
+									{{ form_widget(form.category,{'attr':{'class': 'chosen-select-no-single' }}) }}
 								</div>
 
 
