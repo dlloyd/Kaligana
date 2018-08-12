@@ -1,0 +1,136 @@
+{% extends 'invoice_base.html.twig' %}
+
+{% block print %}
+<!-- Print Button -->
+<a href="javascript:window.print()" class="print-button">Imprimer la facture</a>
+<a href="#" onclick="pdfPrint()" class="print-button">Télécharger la facture</a>
+<a href="{{ path('homepage') }}" class="print-button">Retour page accueil</a>
+{% endblock %}
+
+
+	{% block body %}
+	<!-- Header -->
+	<div class="row">
+		<div class="col-md-6">
+			<div id="logo"><img src="{{ asset('images/logo.png') }}" alt=""></div>
+		</div>
+
+		<div class="col-md-6">	
+
+			<p id="details">
+				<strong>Code:</strong> {{ invoice.code }} <br/>
+				<strong>Date:</strong> {{ invoice.date | date('d/m/Y') }} <br>
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Client & Supplier -->
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Facture</h2>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">Agence</strong>
+			<p>
+				Kaligana EURL. <br>
+				21 St Andrews Leru <br>
+				Bordeaux, 33000, FR <br>
+			</p>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">Client</strong>
+			<p>
+				 {{ invoice.customerFirstName }}  {{ invoice.customerLastName }}  <br/>
+				 {{ invoice.customerEmail }} <br/>	
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Invoice -->
+	<div class="row">
+		<div class="col-md-12">
+			<table class="margin-top-20">
+				<tr>
+					<th>Service</th>
+					<th>Titre</th>
+					<th>Date de début </th>
+	        		<th>Date de fin </th>
+					<th>Total</th>
+				</tr>
+
+				{% for reservation in invoice.reservations %}
+
+			      <tr>
+			        <td> {{ reservation.product.productType.name }} </td>
+			        <td> {{ reservation.product.name }} </td>
+			        <td> {{ reservation.dateBegin | date('d/m/Y') }}  </td>
+			        <td >{{ reservation.dateEnd | date('d/m/Y') }} </td>
+			        <td> {{ resaAmount[reservation.product.id] }} &euro; </td>
+			        
+			      </tr>
+	      
+	    {% endfor %}
+			</table>
+		</div>
+		
+		<div class="col-md-4 col-md-offset-8">	
+			<table id="totals">
+				<tr>
+					<th>Montant total</th> 
+					<th><span>{{ amount }} &euro;</span></th>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<!-- Footer -->
+	<div class="row">
+		<div class="col-md-12">
+			<ul id="footer">
+				<li><span>www.kaligana.com</span></li>
+				<li>kaligana@example.com</li>
+				<li>(+33)6 23 45 46</li>
+			</ul>
+		</div>
+	</div>
+{% endblock %}	
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ asset('scripts/jquery-2.2.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('scripts/jquery-ui.min.js') }}"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	swal("Félicitations!", "votre paiement a été réalisé avec succès, un mail contenant les informations de réservation a été envoyé à votre adresse mai!", "success");
+	});
+</script>
+
+
+<script type="text/javascript">
+	function pdfPrint(){
+		html2canvas(document.getElementById('invoice'), {
+			onrendered: function(canvas){
+				var img = canvas.toDataURL("image/png");
+				var doc = new jsPDF('landscape');
+				doc.addImage(img,'JPEG',0, 0);
+				doc.save('invoice_kaligana.pdf');
+			}
+    
+		});
+
+	}
+</script>
+
+{% endblock %}
+
+
+
+

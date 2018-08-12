@@ -27,6 +27,26 @@ class Reservation
     */
     private $invoice;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $customerFirstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $customerLastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $customerEmail;
 
 
     /**
@@ -166,26 +186,74 @@ class Reservation
     
 
     /**
-     * Set invoice
+     * Set customerFirstName
      *
-     * @param \AppBundle\Entity\Invoice $invoice
+     * @param string $customerFirstName
      *
      * @return Reservation
      */
-    public function setInvoice(\AppBundle\Entity\Invoice $invoice)
+    public function setCustomerFirstName($customerFirstName)
     {
-        $this->invoice = $invoice;
+        $this->customerFirstName = $customerFirstName;
 
         return $this;
     }
 
     /**
-     * Get invoice
+     * Get customerFirstName
      *
-     * @return \AppBundle\Entity\Invoice
+     * @return string
      */
-    public function getInvoice()
+    public function getCustomerFirstName()
     {
-        return $this->invoice;
+        return $this->customerFirstName;
+    }
+
+    /**
+     * Set customerLastName
+     *
+     * @param string $customerLastName
+     *
+     * @return Reservation
+     */
+    public function setCustomerLastName($customerLastName)
+    {
+        $this->customerLastName = $customerLastName;
+
+        return $this;
+    }
+
+    /**
+     * Get customerLastName
+     *
+     * @return string
+     */
+    public function getCustomerLastName()
+    {
+        return $this->customerLastName;
+    }
+
+    /**
+     * Set customerEmail
+     *
+     * @param string $customerEmail
+     *
+     * @return Reservation
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get customerEmail
+     *
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
     }
 }

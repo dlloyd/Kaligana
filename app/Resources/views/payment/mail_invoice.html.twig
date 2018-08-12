@@ -1,0 +1,85 @@
+{% extends 'invoice_base.html.twig' %}
+
+{% block body %}
+
+<!-- Header -->
+	<div class="row">
+		<div class="col-md-6">
+			<div id="logo"><img src="{{ asset('images/logo.png') }}" alt=""></div>
+		</div>
+
+		<div class="col-md-6">	
+
+			<p id="details">
+				<strong>Code:</strong> {{ invoice.code }} <br/>
+				<strong>Date:</strong> {{ invoice.date | date('d/m/Y') }} <br>
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Client & Supplier -->
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Facture</h2>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">Agence</strong>
+			<p>
+				Kaligana EURL. <br>
+				21 St Andrews Leru <br>
+				Bordeaux, 33000, FR <br>
+			</p>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">Client</strong>
+			<p>
+				 {{ invoice.customerFirstName }}  {{ invoice.customerLastName }}  <br/>
+				 {{ invoice.customerEmail }} <br/>	
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Invoice -->
+	<div class="row">
+		<div class="col-md-12">
+			<table class="margin-top-20">
+				<tr>
+					<th>Service</th>
+					<th>Titre</th>
+					<th>Date de début </th>
+	        		<th>Date de fin </th>
+					<th>Total</th>
+				</tr>
+
+				{% for reservation in invoice.reservations %}
+
+			      <tr>
+			        <td> {{ reservation.product.productType.name }} </td>
+			        <td> {{ reservation.product.name }} </td>
+			        <td> {{ reservation.dateBegin | date('d/m/Y') }}  </td>
+			        <td >{{ reservation.dateEnd | date('d/m/Y') }} </td>
+			        <td> {{ resaAmount[reservation.product.id] }} &euro; </td>
+			        
+			      </tr>
+	      
+	    {% endfor %}
+			</table>
+		</div>
+		
+		<div class="col-md-4 col-md-offset-8">	
+			<table id="totals">
+				<tr>
+					<th>Montant total</th> 
+					<th><span>{{ amount }} &euro;</span></th>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+{% endblock %}	
+

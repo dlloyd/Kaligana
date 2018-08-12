@@ -72,7 +72,8 @@
 
     {% for label, messages in app.flashes(['warning', 'error']) %}
         {% for message in messages %}
-            <div class="alert alert-{{ label }}">
+            <div class="alert ">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
                 {{ message }}
             </div>
         {% endfor %}
@@ -116,8 +117,8 @@
                         <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous?' | trans }} </a></li>
                         <li><a href="#"> Nos services </a>
                         <ul>
-                            <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
                             <li><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"> {{ 'Logements' | trans }} </a></li>
+                            <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
                             
                         </ul>
                         </li>

@@ -8892,7 +8892,7 @@ span.like-icon {
 
 .like-icon:hover,
 .like-icon.liked {
-	background-color: #f3103c;
+	background-color: #4169E1;
 }
 
 .like-icon.liked:before{
@@ -11984,7 +11984,7 @@ button.mfp-close {
 	display: inline-block;
 	background-color: #f6f6f6;
 	padding: 35px 40px;
-	margin-bottom: 40px;
+	/*margin-bottom: 40px;*/
 }
 
 .small-dialog-header h3 {
@@ -14124,3 +14124,27 @@ img.mfp-img {
 	#reset a.button:hover { color: #333; background-color: #fff; }
 
 	@media only screen and (max-width: 1024px) {#style-switcher {display: none;}}
+
+.alert {
+padding: 20px;
+background-color: #f44336; /* Red */
+color: white;
+margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}

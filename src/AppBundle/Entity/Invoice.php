@@ -1,0 +1,235 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Invoice
+ *
+ * @ORM\Table(name="invoice")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\InvoiceRepository")
+ */
+class Invoice
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reservation", mappedBy="invoice")
+    */
+    private $reservations;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerFirstName", type="string", length=255)
+     */
+    private $customerFirstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerLastName", type="string", length=255)
+     */
+    private $customerLastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerEmail", type="string", length=255)
+     */
+    private $customerEmail;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="date")
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255)
+     */
+    private $code;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set customerFirstName
+     *
+     * @param string $customerFirstName
+     *
+     * @return Invoice
+     */
+    public function setCustomerFirstName($customerFirstName)
+    {
+        $this->customerFirstName = $customerFirstName;
+
+        return $this;
+    }
+
+    /**
+     * Get customerFirstName
+     *
+     * @return string
+     */
+    public function getCustomerFirstName()
+    {
+        return $this->customerFirstName;
+    }
+
+    /**
+     * Set customerLastName
+     *
+     * @param string $customerLastName
+     *
+     * @return Invoice
+     */
+    public function setCustomerLastName($customerLastName)
+    {
+        $this->customerLastName = $customerLastName;
+
+        return $this;
+    }
+
+    /**
+     * Get customerLastName
+     *
+     * @return string
+     */
+    public function getCustomerLastName()
+    {
+        return $this->customerLastName;
+    }
+
+    /**
+     * Set customerEmail
+     *
+     * @param string $customerEmail
+     *
+     * @return Invoice
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get customerEmail
+     *
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Invoice
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Invoice
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reservations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reservation
+     *
+     * @param \AppBundle\Entity\Reservation $reservation
+     *
+     * @return Invoice
+     */
+    public function addReservation(\AppBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations[] = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Remove reservation
+     *
+     * @param \AppBundle\Entity\Reservation $reservation
+     */
+    public function removeReservation(\AppBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations->removeElement($reservation);
+    }
+
+    /**
+     * Get reservations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
+    }
+}

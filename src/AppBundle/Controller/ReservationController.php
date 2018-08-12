@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Reservation;
+use AppBundle\Entity\Invoice;
 
 
 class ReservationController extends Controller
@@ -131,27 +132,33 @@ class ReservationController extends Controller
             if ($form->isSubmitted() && $form->isValid() ) {
               try{
                 \Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
-                $username = $form->get('firstname')->getData()." ".$form->get('lastname')->getData();
+                $firstname = $form->get('firstname')->getData();
+                $lastname = $form->get('lastname')->getData();
+                $email = $form->get('email')->getData();
                 $charge = \Stripe\Charge::create(array(
-                  'customer' => $username,
                   'amount'   => $amount*100,
                   'currency' => 'eur',
                   'source' => $form->get('token')->getData(),
-                  'receipt_email' => $form->get('email')->getData()
+                  'receipt_email' => $email
                 ));
 
-                $resa = $this->createNewReservation($resasSession);
-                $em->persist($resa);
-                $em->flush();
+                $invoice = $this->createInvoiceReservations($resasSession,$firstname,$lastname,$email);
 
                 //Envoyer email avec infos
 
-                $session->remove('reservation');
-                return $this->render('payment/success.html.twig',array('reservation'=>$resa,'amount'=>$amount,));
+                // detruit les données de réservation en session
+                $session->remove('reservations');
+                $session->remove('resa_lodgment');
+                $session->remove('resa_car');
+                return $this->render('payment/invoice.html.twig',array(
+                    'resaAmount' => $resaAmount,
+                    'amount'=>$amount,
+                    'invoice'=>$invoice,
+                    ));
 
               }
               catch(\Stripe\Error\Base $e){
-                $this->addFlash('warning', sprintf('Unable to take payment, %s', $e instanceof \Stripe\Error\Card ? lcfirst($e->getMessage()) : 'please try again.'));
+                $this->addFlash('warning', $e->getMessage());
               }
             }
           }
@@ -178,17 +185,17 @@ class ReservationController extends Controller
     }
 
     /**
-     * @Route("/admin/show/res/{code}", name="show_reservation_by_code")
+     * @Route("/admin/show/inv/{code}", name="show_invoice_by_code")
      */
-    public function showReservationByCodeAction($code){
+    public function showInvoiceByCodeAction($code){
     	$em = $this->getDoctrine()->getManager();
-    	$res = $em->getRepository('AppBundle:Reservation')->findBy(['name' => $code]);
+    	$res = $em->getRepository('AppBundle:Invoice')->findBy(['code' => $code]);
     	if($res){
-    		return $this->render('reservation/reservation.html.twig', array('reservation' => $res )); 
+    		return $this->render('reservation/invoice.html.twig', array('invoice' => $res )); 
     	}
 
-    	$request->getSession()->getFlashBag()->add('error','Code réservation inexistant');
-        return $this->render('reservation/reservation.html.twig');
+    	$request->getSession()->getFlashBag()->add('error','Code facture inexistant');
+        return $this->redirectToRoute('show_all_reservations');
     }
 
     /**
@@ -229,7 +236,7 @@ class ReservationController extends Controller
 
 
 
-    public function generateCode($reservation){  //génère code de réservation unique 
+    public function generateCode($reservation){  //génère invoice code 
     	return null;
     }
 
@@ -301,17 +308,30 @@ class ReservationController extends Controller
     }
 
 
-    public function createNewReservation($resasSession){
-        $resa = new Reservation();
-        $resa->setProduct($product);
-        $resa->setDateBegin(new \Datetime($resaSession['dateBegin']));
-        $resa->setDateEnd(new \Datetime($resaSession['dateEnd']));
-        $resa->setQuantity($resaSession['quantity']);
-        $resa->setCode("fakecodetest");
-        $resa->setCustomerFirstName($resaSession['firstname']);
-        $resa->setCustomerLastName($resaSession['lastname']);
-
-        return $resa;
+    public function createInvoiceReservations($resasSession,$firstname,$lastname,$email){
+        $em = $this->getDoctrine()->getManager();
+        $invoice = new Invoice();
+        $invoice->setDate(new \Datetime());
+        $invoice->setCode("fakecodetest");
+        $invoice->setCustomerFirstName($firstname);
+        $invoice->setCustomerLastName($lastname);
+        $invoice->setCustomerEmail($email);
+        $em->persist($invoice);
+        
+        foreach ($resasSession as $resaSession ) {
+            $resa = new Reservation();
+            $product = $em->getRepository('AppBundle:Product')->find($resaSession['productId']);
+            $resa->setProduct($product);
+            $resa->setDateBegin(new \Datetime($resaSession['dateBegin']));
+            $resa->setDateEnd(new \Datetime($resaSession['dateEnd']));
+            $resa->setQuantity($resaSession['quantity']);
+            $resa->setInvoice($invoice);
+            $invoice->addReservation($resa);
+            
+            $em->persist($resa);
+        }
+        $em->flush();
+        return $invoice;
     }
 
     public function paymentForm(){
@@ -328,15 +348,15 @@ class ReservationController extends Controller
     }
 
 
-    public function sendMailConfirmationReservation($reservation){
+    public function sendMailConfirmationReservation($reservations){
         $message = (new \Swift_Message('Confirmation réservation'))
         ->setFrom('kaligana@mail.com')
         ->setTo($email)
         ->setBody(
             $this->renderView(
                 // app/Resources/views/Emails/registration.html.twig
-                'payment/email_validation.html.twig',
-                array('reservation' => $reservation)
+                'payment/mail_invoice.html.twig',
+                array('reservations' => $reservation)
             ),
             'text/html'
         );

@@ -8,8 +8,8 @@ imports:
 parameters:
     locale: fr 
     front_nb_products_by_page: 9
-    stripe_public_key: pk_test_xxxxxxxxxxxxxxxxxxxxxxxx
-    stripe_secret_key: sk_test_xxxxxxxxxxxxxxxxxxxxxxxx
+    stripe_public_key: pk_test_BKxmkv6I4pN93tLyFyrygT9v
+    stripe_secret_key: sk_test_sDXS3r78lxUI4VnHYQ9LUy5E
 
 jms_i18n_routing:
     default_locale: fr

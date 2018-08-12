@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<title>Kaligana Facture</title>
+	<link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+</head> 
+
+<body>
+
+{% block print %}
+
+{% endblock %}
+
+<!-- Invoice -->
+<div id="invoice">
+	{% block body %}
+	
+	{% endblock %}	
+</div>
+
+{% block javascripts %}
+
+{% endblock %}
+
+</body>
+</html>

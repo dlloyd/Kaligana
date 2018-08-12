@@ -261,75 +261,8 @@
 
 <!-- Container / End -->
 
+{{ render(controller('AppBundle:Default:partner')) }}
 
-<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
-
-				<div class="small-dialog-header">
-					<h3>Devenir partenaire</h3>
-				</div>
-
-				<!--Tabs -->
-				<div class="sign-in-form style-1">
-
-						<!-- Register -->
-						<div class="tab-content" id="tab2" >
-
-							<form method="post" class="register">
-							<p style="color: black;" >Vous souhaitez devenir partenaire touristique de Kaligana ? Laissez-nous vos coordonnées et nous prendrons contact avec vous.</p>
-							<p class="form-row form-row-wide">
-								<label for="username">Nom et prénom:
-									<i class="im im-icon-Male"></i>
-									<input type="text" class="input-text" name="username" id="username2" value="" />
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="company">Entreprise:
-									<i class="im im-icon-Factory-2"></i>
-									<input type="text" class="input-text" name="company" id="company" value="" />
-								</label>
-							</p>
-								
-							<p class="form-row form-row-wide">
-								<label for="email">Email Address:
-									<i class="im im-icon-Mail"></i>
-									<input type="text" class="input-text" name="email" id="email" value="" />
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="phone">Téléphone:
-									<i class="im im-icon-Telephone "></i>
-									<input class="input-text" type="text" name="phone" id="phone"/>
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="country">Pays:
-									<i class="im im-icon-Globe"></i>
-									<input class="input-text" type="text" name="country" id="country"/>
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="message">Message:
-									<textarea> </textarea>
-								</label>
-							</p>
-
-							<input type="submit" class="button border fw margin-top-10" name="register" value="Envoyer" />
-	
-							</form>
-						</div>
-
-					
-				</div>
-			</div>
-
-
-
-
-    
 {% endblock %}
 
 
@@ -444,6 +377,30 @@
 		});
 		}
 	});	/*ready*/
+</script>
+
+
+<script type="text/javascript">
+   
+    $('body').on('submit', '#form_partner', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize()
+        })
+        .done(function (data) {
+            swal("Félicitations!", "Vous message a bien été envoyé!", "success");
+            //$( "#news" ).hide();
+            
+        })
+        .fail(function (data) {
+            swal("Ouch!", "Une erreur est survenu,lors de l'envoi ", "error");
+ 
+        });
+    });
 </script>
 
 {% endblock %}

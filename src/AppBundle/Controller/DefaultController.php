@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\NewsletterEmails;
 
@@ -74,11 +76,58 @@ class DefaultController extends Controller
         return new JsonResponse(array('error' => 'Form error'), 400);
     }
 
+    /**
+     * @Route("/partner/", name="partner")
+     * @Method("GET")
+     */
+    public function partnerAction(){
+
+        $form = $this->partnerForm();
+        return $this->render('default/partner.html.twig',array('form'=>$form->createView(),));
+    }
+
+
+    /**
+     * @Route("/partner/save/", name="send_infos_partner")
+     * @Method("POST")
+     */
+    public function savePartnerAction(Request $req){
+        
+        if (!$req->isXmlHttpRequest()) {
+            return new JsonResponse(array('message' => 'Uniquement requête Ajax'), 400);
+        }
+
+        $form = $this->partnerForm();
+        
+        $form->HandleRequest($req);
+        if($form->isSubmitted() && $form->isValid()){
+            //send mail with infos
+            return new JsonResponse(array('message' => 'Success!'), 200);    
+        }
+
+        return new JsonResponse(array('error' => 'Form error'), 400);
+    }
+
+
 
     public function newsletterForm(){
         $data = array();
         return $this->createFormBuilder($data)
             ->add('email', EmailType::class)
+            ->add('save', SubmitType::class, array('label' => 'Envoyer'))
+            ->getForm();
+    }
+
+
+    public function partnerForm(){
+        $data = array();
+        return $this->createFormBuilder($data)
+            ->add('email', EmailType::class)
+            ->add('username', TextType::class)
+            ->add('country', TextType::class)
+            ->add('company', TextType::class)
+            ->add('phone', TextType::class)
+            ->add('message', TextareaType::class)
             ->add('save', SubmitType::class, array('label' => 'Envoyer'))
             ->getForm();
     }

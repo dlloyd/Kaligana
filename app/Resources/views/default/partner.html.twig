@@ -1,0 +1,70 @@
+
+
+<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+
+        <div class="small-dialog-header">
+            <h3>Devenir partenaire</h3>
+        </div>
+
+        <!--Tabs -->
+        <div class="sign-in-form style-1">
+
+                <!-- Register -->
+                <div class="tab-content" id="tab2" >
+
+                    {{ form_start(form, {'attr': {'id': 'form_partner'},'method': 'post', 'action': path('send_infos_partner') }) }}
+
+                    <p style="color: black;" >Vous souhaitez devenir partenaire touristique de Kaligana ? Laissez-nous vos coordonnées et nous prendrons contact avec vous.</p>
+                    <p class="form-row form-row-wide">
+                        <label for="username">Nom et prénom:
+                            <i class="im im-icon-Male"></i>
+                            {{ form_widget(form.username,{'attr':{'class': 'input-text' }}) }}
+                        </label>
+                        
+                    </p>
+
+                    <p class="form-row form-row-wide">
+                        <label for="company">Entreprise:
+                            <i class="im im-icon-Factory-2"></i>
+                            {{ form_widget(form.company,{'attr':{'class': 'input-text' }}) }}
+                        </label>   
+                    </p>
+                        
+                    <p class="form-row form-row-wide">
+                        <label for="email">Email Address:
+                            <i class="im im-icon-Mail"></i>
+                            {{ form_widget(form.email,{'attr':{'class': 'input-text' }}) }}
+                        </label>   
+                    </p>
+
+                    <p class="form-row form-row-wide">
+                        <label for="phone">Téléphone:
+                            <i class="im im-icon-Telephone "></i>
+                            {{ form_widget(form.phone,{'attr':{'class': 'input-text' }}) }}
+                        </label>   
+                    </p>
+
+                    <p class="form-row form-row-wide">
+                        <label for="country">Pays:
+                            <i class="im im-icon-Globe"></i>
+                            {{ form_widget(form.country,{'attr':{'class': 'input-text' }}) }}
+                        </label>
+                    </p>
+
+                    <p class="form-row form-row-wide">
+                        <label for="message">Message:
+                            {{ form_widget(form.message) }}
+                        </label>
+                    </p>
+
+                    {{ form_widget(form.save,{'attr':{'class': 'button border fw margin-top-10' }}) }}
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+
+    
+                </div>
+
+            
+        </div>
+    </div>
