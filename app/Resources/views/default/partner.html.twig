@@ -3,7 +3,7 @@
 <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
 
         <div class="small-dialog-header">
-            <h3>Devenir partenaire</h3>
+            <h3>{{ 'Devenir partenaire'|trans }}</h3>
         </div>
 
         <!--Tabs -->
@@ -14,9 +14,9 @@
 
                     {{ form_start(form, {'attr': {'id': 'form_partner'},'method': 'post', 'action': path('send_infos_partner') }) }}
 
-                    <p style="color: black;" >Vous souhaitez devenir partenaire touristique de Kaligana ? Laissez-nous vos coordonnées et nous prendrons contact avec vous.</p>
+                    <p style="color: black;" >{{ 'Vous souhaitez devenir partenaire touristique de Kaligana ? Laissez-nous vos coordonnées et nous prendrons contact avec vous'|trans }}.</p>
                     <p class="form-row form-row-wide">
-                        <label for="username">Nom et prénom:
+                        <label for="username">{{ 'Nom et prénom' | trans }}:
                             <i class="im im-icon-Male"></i>
                             {{ form_widget(form.username,{'attr':{'class': 'input-text' }}) }}
                         </label>
@@ -24,28 +24,28 @@
                     </p>
 
                     <p class="form-row form-row-wide">
-                        <label for="company">Entreprise:
+                        <label for="company">{{ 'Entreprise' | trans }} :
                             <i class="im im-icon-Factory-2"></i>
                             {{ form_widget(form.company,{'attr':{'class': 'input-text' }}) }}
                         </label>   
                     </p>
                         
                     <p class="form-row form-row-wide">
-                        <label for="email">Email Address:
+                        <label for="email">{{ 'Email'|trans }} :
                             <i class="im im-icon-Mail"></i>
                             {{ form_widget(form.email,{'attr':{'class': 'input-text' }}) }}
                         </label>   
                     </p>
 
                     <p class="form-row form-row-wide">
-                        <label for="phone">Téléphone:
+                        <label for="phone">{{ 'Téléphone'|trans }}:
                             <i class="im im-icon-Telephone "></i>
                             {{ form_widget(form.phone,{'attr':{'class': 'input-text' }}) }}
                         </label>   
                     </p>
 
                     <p class="form-row form-row-wide">
-                        <label for="country">Pays:
+                        <label for="country">{{ 'Pays'|trans }}:
                             <i class="im im-icon-Globe"></i>
                             {{ form_widget(form.country,{'attr':{'class': 'input-text' }}) }}
                         </label>

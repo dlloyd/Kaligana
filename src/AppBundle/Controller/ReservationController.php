@@ -310,9 +310,11 @@ class ReservationController extends Controller
 
     public function createInvoiceReservations($resasSession,$firstname,$lastname,$email){
         $em = $this->getDoctrine()->getManager();
+        $index = $em->getRepository('AppBundle:Invoice')->getCount()+ 1;
+        $code = "#kaliINV".$index ;
         $invoice = new Invoice();
         $invoice->setDate(new \Datetime());
-        $invoice->setCode("fakecodetest");
+        $invoice->setCode($code);
         $invoice->setCustomerFirstName($firstname);
         $invoice->setCustomerLastName($lastname);
         $invoice->setCustomerEmail($email);

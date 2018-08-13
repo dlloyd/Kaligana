@@ -54,19 +54,18 @@ class ProductController extends Controller
     public function productsByCategoryAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $categ = $em->getRepository('AppBundle:ProductType')->find($id);
+        $categ = $em->getRepository('AppBundle:ProductCategory')->find($id);
+        $title = $this->getProductTypeName($categ->getCode());
 
-        //verify type exists
+        //verify category exists
         if(!$categ){
             throw $this->createNotFoundException('catégorie inexistante');
         }
 
-        $title = $categ->getName();
-
         $prods = $em->getRepository('AppBundle:Product')->findBy(['category'=>$categ]);
 
         return $this->render('category/products-by-categ.html.twig',
-            array('products'=>$prods,'title'=>$title,));
+            array('products'=>$prods,'category'=>$categ,'title'=>$title,));
     }
 
     /**

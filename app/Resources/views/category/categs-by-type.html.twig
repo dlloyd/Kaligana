@@ -5,14 +5,14 @@
 				<div class="main-search-input-item">
 					<select data-placeholder="All Categories" class="chosen-select" id="categ-search" >
 				
-						<option value="{{ path('products_by_type',{'code': code,'page':1}) }}"> Toutes catégories</option>
+						<option value="{{ path('products_by_type',{'code': code,'page':1}) }}"> {{ 'Toutes catégories' | trans }}</option>
 						{% for category in categories %}
-							<option value="{{ path('products_by_category',{'id':category.id}) }}"> {{ category.name }}</option>
+							<option value="{{ path('products_by_category',{'id':category.id}) }}"> {{ category.name | trans }}</option>
 						{% endfor %}	
 					</select>
 				</div>
 
-				<button class="button" onclick="getCategory()">Search</button>
+				<button class="button" onclick="getCategory()">{{ 'Rechercher'|trans }}</button>
 			</div>
 </div>
 

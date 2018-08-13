@@ -10,14 +10,14 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2>{{ title|trans }}</h2><span> {{ category.name }} </span>
+				<h2>{{ title|trans }}</h2><span> {{ category.name | trans }} </span>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
 					<ul>
-						<li><a href="{{ path('homepage') }}">Accueil</a></li>
-						<li><a href="{{ path('products_by_type',{'code':category.code}) }}">Toutes catégories </a></li>
-						<li>{{ category.name }}</li>
+						<li><a href="{{ path('homepage') }}">{{ 'Accueil'|trans }}</a></li>
+						<li><a href="{{ path('products_by_type',{'code':category.code,'page':1}) }}">{{ title|trans }} </a></li>
+						<li>{{ category.name | trans }}</li>
 					</ul>
 				</nav>
 

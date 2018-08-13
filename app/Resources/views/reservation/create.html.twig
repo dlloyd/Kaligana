@@ -21,15 +21,15 @@
     	{{ form_widget(form.manyDays) }}
     	{{ form_label(form.manyDays) }}
     </div>
-	{{ form_label(form.dateUnique) }}
+	{{ form_label(form.dateUnique,'Choisir un jour') }}
 	{{ form_widget(form.dateUnique) }}
 
 	
-	{{ form_label(form.dateRange) }}
+	{{ form_label(form.dateRange,'Période') }}
 	{{ form_widget(form.dateRange) }}
 
     {% else %}
-        {{ form_label(form.quantity) }}
+        {{ form_label(form.quantity,'Quantité') }}
         {{ form_widget(form.quantity) }}
     {% endif %}
 

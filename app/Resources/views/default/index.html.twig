@@ -56,10 +56,10 @@
 					data-basealign="slide"
 					data-responsive_offset="off"
 					data-responsive="off"
-					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">Logements</div>
+					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">{{ 'Logements'|trans }}</div>
 
-					<div class="caption-text">Choisissez votre logement idéal</div>
-					<a href="#" class="button medium">Découvrir</a>
+					<div class="caption-text"> {{ 'Choisissez votre logement idéal' |trans }}</div>
+					<a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}" class="button medium">{{ 'Découvrir' | trans }}</a>
 				</div>
 
 			</li>
@@ -108,10 +108,12 @@
 					data-basealign="slide"
 					data-responsive_offset="off"
 					data-responsive="off"
-					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">Voitures</div>
+					style="z-index: 6; color: #fff; letter-spacing: 0px; font-weight: 600; ">{{ 'Voitures' | trans }}</div>
 
-					<div class="caption-text">Sélectionnez votre voiture pour être autonome <br/> durant votre séjour</div>
-					<a href="#" class="button medium">Découvrir</a>
+					<div class="caption-text">
+						{{ 'Sélectionnez votre voiture pour être autonome' | trans }} <br/>
+						{{ 'durant votre séjour' | trans }} </div>
+					<a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}" class="button medium">{{ 'Découvrir' | trans }}</a>
 
 
 					
@@ -169,13 +171,14 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h2 class="headline centered margin-top-80" >
-				Appropriez-vous Votre Voyage <br/> comme il se doit. 
-				<span class="margin-top-25" style="font-size: 57%; font-style: italic;text-transform: lowercase;"><span style="text-transform: uppercase;display: inline;">K</span>aligana vous accompagne dans la personnalisation de votre voyage aux Caraïbes grâce à ses partenaires locaux et éthiques.</span>
+				{{ 'Appropriez-vous Votre Voyage' | trans }}
+				 <br/>{{ 'comme il se doit' | trans }}. 
+				<span class="margin-top-25" style="font-size: 57%; font-style: italic;text-transform: lowercase;"><span style="text-transform: uppercase;display: inline;">K</span>{{'aligana vous accompagne dans la personnalisation de votre voyage aux Caraïbes grâce à ses partenaires locaux et éthiques' |trans }}.</span>
 			</h2>
 		</div>
 	</div>
 	<div align="center" ><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"
-	 class="button" style="padding: 2% 11%;font-size: 150%;">Votre voyage commence ici </a></div><br/>
+	 class="button" style="padding: 2% 11%;font-size: 150%;">{{ 'Votre voyage commence ici' | trans }} </a></div><br/>
 </div>
 <div style="border-bottom: 1px solid rgba(0,0,0,0.09);"></div>
 <!-- Container / End -->
@@ -187,7 +190,7 @@
 	<div class="row">
 
 		<div class="col-md-12">
-			<h3 class="headline centered margin-bottom-35 margin-top-70">NOS SERVICES </h3>
+			<h3 class="headline centered margin-bottom-35 margin-top-70">{{ 'Nos services'|trans }} </h3>
 		</div>
 		
 		<div class="col-md-4">
@@ -195,7 +198,7 @@
 			<!-- Image Box -->
 			<a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}" class="img-box" data-background-image="{{asset('images/location_bungalow_guadeloupe_kaligana.jpg')}}">
 				<div class="img-box-content visible">
-					<h4>Locations de logements saisonniers </h4>
+					<h4>{{ 'Locations de logements saisonniers' | trans }}  </h4>
 					
 				</div>
 			</a>
@@ -207,7 +210,7 @@
 			<!-- Image Box -->
 			<a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}" class="img-box" data-background-image="{{asset('images/location_voiture_guadeloupe_kaligana.jpg')}}">
 				<div class="img-box-content visible">
-					<h4>Locations voitures</h4>
+					<h4> {{ 'Locations de voitures' | trans }} </h4>
 					
 				</div>
 			</a>
@@ -218,9 +221,9 @@
 
 			<!-- Image Box -->
 			<a href="#" onclick="return false;" class="img-box" data-background-image="{{asset('images/carnaval_guadeloupe_kaligana.jpg')}}">
-				<div class="listing-badge now-closed">à venir</div>
+				<div class="listing-badge now-closed">{{ 'à venir' | trans }} </div>
 				<div class="img-box-content visible">
-					<h4>activités touristiques</h4>
+					<h4>{{ 'Activités touristiques' | trans }} </h4>
 					
 				</div>
 			</a>
@@ -234,12 +237,12 @@
 
 <!-- Container -->
 <div class="container" >
-	<h3 class="headline centered margin-bottom-35 margin-top-70">le concept de kaligana </h3>
+	<h3 class="headline centered margin-bottom-35 margin-top-70">{{ 'Le concept de Kaligana' | trans }} </h3>
 	<div style="margin-left: 7%;font-size: 120%" >
-		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Première plateforme e-tourisme 100% Caraïbes <br/>
-		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Liberté totale dans la planification de votre séjour <br/> 
-		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> 100% responsable et solidaire avec les acteurs du tourisme local <br/>
-		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span> Une démarche éthique et eco-friendly <br/>
+		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span>{{ 'Première plateforme e-tourisme 100% Caraïbes' | trans }}  <br/>
+		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span>{{ 'Liberté totale dans la planification de votre séjour' | trans }}  <br/> 
+		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span>{{ '100% responsable et solidaire avec les acteurs du tourisme local' | trans }}  <br/>
+		<span style="color: green;"> <i class="fa fa-check fa-2x"></i></span>{{ 'Une démarche éthique et eco-friendly' | trans }}  <br/>
 		
 	</div>
 	
@@ -249,14 +252,14 @@
 
 <!-- Container -->
 <div class="container" >
-	<h3 class="headline centered margin-bottom-35 margin-top-70">nos garanties </h3>
+	<h3 class="headline centered margin-bottom-35 margin-top-70">{{ 'Nos garanties' | trans }}  </h3>
 	<div style="margin-left: 10%;font-size: 120%" >
 		<ul>
 			<li>Assurance ...</li>
 			<li>Paiement sécurisé avec Stripe  </li>
 		</ul>
 	</div> <br/><br/>
-	<div align="center" ><a href="#sign-in-dialog" class="button sign-in popup-with-zoom-anim" style="padding: 2% 11%;font-size: 150%;">devenir partenaire de Kaligana </a></div><br/>
+	<div align="center" ><a href="#sign-in-dialog" class="button sign-in popup-with-zoom-anim" style="padding: 2% 11%;font-size: 150%;">{{ 'Devenir partenaire de Kaligana' | trans }}  </a></div><br/>
 </div>
 
 <!-- Container / End -->
@@ -392,12 +395,15 @@
             data: $(this).serialize()
         })
         .done(function (data) {
-            swal("Félicitations!", "Vous message a bien été envoyé!", "success");
+        	var title = "{{ 'Félicitations!' | trans }}" ;
+        	var message = "{{ 'Votre message a bien été envoyé!' | trans }}" ;
+            swal(title, message, "success");
             //$( "#news" ).hide();
             
         })
         .fail(function (data) {
-            swal("Ouch!", "Une erreur est survenu,lors de l'envoi ", "error");
+        	var message = "{{ 'Une erreur est survenu,lors de l\'envoi' | trans }}" ;
+            swal("Ouch!", message, "error");
  
         });
     });

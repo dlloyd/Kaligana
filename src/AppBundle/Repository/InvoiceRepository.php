@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class InvoiceRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function getCount() {
+		return $this->createQueryBuilder('i')
+		 ->select('COUNT(i)')
+		 ->getQuery()
+		 ->getSingleScalarResult();
+	}
+	
+
+
 }

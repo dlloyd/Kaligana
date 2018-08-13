@@ -10,13 +10,13 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2>Réservation</h2>
+				<h2>{{ 'Réservation'| trans }}</h2>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
 					<ul>
-						<li><a href=" {{ path('homepage') }} ">Accueil</a></li>
-						<li>Réservation</li>
+						<li><a href=" {{ path('homepage') }} ">{{ 'Accueil'|trans }}</a></li>
+						<li>{{ 'Réservation'|trans }}</li>
 					</ul>
 				</nav>
 
@@ -40,7 +40,7 @@
 
 				{{ form_widget(form.token) }}
 
-			<h3 class="margin-top-0 margin-bottom-30">Qui fait la réservation ?</h3>
+			<h3 class="margin-top-0 margin-bottom-30">{{ 'Qui fait la réservation ?'|trans }}</h3>
 
 			<div class="row">
 
@@ -67,7 +67,7 @@
 			</div>
 
 
-			<h3 class="margin-top-55 margin-bottom-30">Mode de paiement</h3>
+			<h3 class="margin-top-55 margin-bottom-30">{{ 'Mode de paiement'|trans }}</h3>
 
 			<!-- Payment Methods Accordion -->
 			<div class="payment">
@@ -106,7 +106,7 @@
 		<div class="col-lg-4 col-md-4 margin-top-0 margin-bottom-60">
 			
 			<div class="boxed-widget opening-hours summary margin-top-0">
-				<h3><i class="fa fa-calendar-check-o"></i> Détail réservation</h3>
+				<h3><i class="fa fa-calendar-check-o"></i> {{ 'Détails réservation'|trans }}</h3>
 				<ul>
 				{% for reservation in reservations %}
 			
@@ -126,16 +126,16 @@
 
 						{% endif %}
 						
-						<li >Montant <span>{{ resaAmount[reservation.productId] }} &euro;</span></li>
-						<li> Supprimer <span><a href="{{ path('remove_reservation_product',{'id': reservation.productId }) }}"> {{'ici'| trans }} </a></span></li>
+						<li >{{'Montant'|trans }} <span>{{ resaAmount[reservation.productId] }} &euro;</span></li>
+						<li> {{ 'Supprimer'|trans }} <span><a href="{{ path('remove_reservation_product',{'id': reservation.productId }) }}"> {{'ici'| trans }} </a></span></li>
 						<div style="border-bottom: 1px solid rgba(0,0,0,0.09);"></div><br/>
 					
 
 				
 				{% endfor %}
 
-				<li class="total-costs">Montant Total <span>{{ amount }} &euro;</span></li>
-						<li> Annuler <span><a href="{{ path('remove_reservation_session') }}"> {{'ici'| trans }} </a></span></li>
+				<li class="total-costs">{{'Montant Total'|trans }} <span>{{ amount }} &euro;</span></li>
+						<li> {{'Annuler'|trans }} <span><a href="{{ path('remove_reservation_session') }}"> {{'ici'| trans }} </a></span></li>
 				</ul>
 			</div>
 

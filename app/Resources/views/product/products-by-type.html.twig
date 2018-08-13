@@ -10,12 +10,12 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2>{{ title|trans }}</h2><span>Liste de nos {{ title|trans }}</span>
+				<h2>{{ title|trans }}</h2><span>{{'Liste de nos'|trans }} {{ title|trans }}</span>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
 					<ul>
-						<li><a href="{{ path('homepage') }}">Accueil</a></li>
+						<li><a href="{{ path('homepage') }}">{{ 'Accueil'|trans }}</a></li>
 						<li>{{ title | trans }}</li>
 					</ul>
 				</nav>

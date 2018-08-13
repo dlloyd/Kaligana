@@ -2,9 +2,9 @@
 
 {% block print %}
 <!-- Print Button -->
-<a href="javascript:window.print()" class="print-button">Imprimer la facture</a>
-<a href="#" onclick="pdfPrint()" class="print-button">Télécharger la facture</a>
-<a href="{{ path('homepage') }}" class="print-button">Retour page accueil</a>
+<a href="javascript:window.print()" class="print-button">{{ 'Imprimer la facture'|trans }}</a>
+<a href="#" onclick="pdfPrint()" class="print-button">{{ 'Télécharger la facture'|trans }}</a>
+<a href="{{ path('homepage') }}" class="print-button">{{ 'Retour accueil'| trans }}</a>
 {% endblock %}
 
 
@@ -18,8 +18,14 @@
 		<div class="col-md-6">	
 
 			<p id="details">
-				<strong>Code:</strong> {{ invoice.code }} <br/>
-				<strong>Date:</strong> {{ invoice.date | date('d/m/Y') }} <br>
+				<strong>{{'Code'|trans }}:</strong> {{ invoice.code }} <br/>
+				{% if app.request.locale == 'fr' %}
+				<strong>{{ 'Date'|trans }}:</strong> {{ invoice.date | date('d/m/Y') }} <br>
+				{% else %}
+				<strong>{{ 'Date'|trans }}:</strong> {{ invoice.date | date('Y-m-d') }} <br>
+
+				{% endif %}
+				
 			</p>
 		</div>
 	</div>
@@ -28,11 +34,11 @@
 	<!-- Client & Supplier -->
 	<div class="row">
 		<div class="col-md-12">
-			<h2>Facture</h2>
+			<h2>{{ 'Facture'|trans }}</h2>
 		</div>
 
 		<div class="col-md-6">	
-			<strong class="margin-bottom-5">Agence</strong>
+			<strong class="margin-bottom-5">{{'Agence'|trans }}</strong>
 			<p>
 				Kaligana EURL. <br>
 				21 St Andrews Leru <br>
@@ -41,7 +47,7 @@
 		</div>
 
 		<div class="col-md-6">	
-			<strong class="margin-bottom-5">Client</strong>
+			<strong class="margin-bottom-5">{{ 'Client'|trans }}</strong>
 			<p>
 				 {{ invoice.customerFirstName }}  {{ invoice.customerLastName }}  <br/>
 				 {{ invoice.customerEmail }} <br/>	
@@ -55,11 +61,11 @@
 		<div class="col-md-12">
 			<table class="margin-top-20">
 				<tr>
-					<th>Service</th>
-					<th>Titre</th>
-					<th>Date de début </th>
-	        		<th>Date de fin </th>
-					<th>Total</th>
+					<th>{{ 'Service'|trans }}</th>
+					<th>{{ 'Titre'|trans }}</th>
+					<th>{{ 'Date début'|trans }} </th>
+	        		<th>{{ 'Date fin'|trans }} </th>
+					<th>{{ 'Total'|trans }}</th>
 				</tr>
 
 				{% for reservation in invoice.reservations %}
@@ -67,8 +73,16 @@
 			      <tr>
 			        <td> {{ reservation.product.productType.name }} </td>
 			        <td> {{ reservation.product.name }} </td>
-			        <td> {{ reservation.dateBegin | date('d/m/Y') }}  </td>
+			        {% if app.request.locale == 'fr' %}
+					<td> {{ reservation.dateBegin | date('d/m/Y') }}  </td>
 			        <td >{{ reservation.dateEnd | date('d/m/Y') }} </td>
+
+					{% else %}
+					<td> {{ reservation.dateBegin | date('Y-m-d') }}  </td>
+			        <td >{{ reservation.dateEnd | date('Y-m-d') }} </td>
+
+					{% endif %}
+			        
 			        <td> {{ resaAmount[reservation.product.id] }} &euro; </td>
 			        
 			      </tr>
@@ -80,7 +94,7 @@
 		<div class="col-md-4 col-md-offset-8">	
 			<table id="totals">
 				<tr>
-					<th>Montant total</th> 
+					<th>{{ 'Montant Total'|trans }}</th> 
 					<th><span>{{ amount }} &euro;</span></th>
 				</tr>
 			</table>
@@ -109,7 +123,9 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	swal("Félicitations!", "votre paiement a été réalisé avec succès, un mail contenant les informations de réservation a été envoyé à votre adresse mai!", "success");
+	var title = "{{ 'Félicitations!' | trans }}" ;
+	var message = "{{ 'Votre paiement a été réalisé avec succès, un mail contenant les informations de réservation a été envoyé à votre adresse mai!' | trans }}";
+	swal(title, message, "success");
 	});
 </script>
 

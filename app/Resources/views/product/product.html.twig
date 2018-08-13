@@ -14,25 +14,25 @@
     padding-top: 2%;
     padding-bottom: 2%;
     padding-left: 5%;">
-	<h1>Bravo !!</h1>
-	<p>Votre réservation a bien été prise en compte! </p>
+	<h1>{{'Félicitations!'|trans }}</h1>
+	<p>{{ 'Votre réservation a bien été prise en compte!'|trans }} </p>
 
 
-	<p>Autres services:</p>
+	<p>{{ 'Autres services'| trans }}:</p>
 	<p>
 	 {% if product.productType.code == "LOD" %}
 	 	{% if app.session.get('reservations') is null or app.session.get('resa_car') is null %}
-	 		<a class="button" href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">Voitures </a>
+	 		<a class="button" href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">{{ 'Voitures'|trans }} </a>
 	 	{% endif %}
 	 {% elseif product.productType.code == "CAR" %}
 	 	{% if app.session.get('reservations') is null or app.session.get('resa_lodgment') is null %}
-	 		<a class="button" href="{{ path('products_by_type',{'code':'LOD','page':1}) }}">Logements </a>
+	 		<a class="button" href="{{ path('products_by_type',{'code':'LOD','page':1}) }}">{{ 'Logements'|trans }} </a>
 	 	{% endif %}
 	 {% endif %}
 	</p>
 	<br/>
 	<p>
-		<a class="button" href="{{ path('validate_payment_reservation') }}">Passer au paiement </a>
+		<a class="button" href="{{ path('validate_payment_reservation') }}"> {{ 'Passer au paiement'|trans }} </a>
 	</p>
 </div>
 
@@ -66,8 +66,8 @@
 			<!-- Listing Nav -->
 			<div id="listing-nav" class="listing-nav-container">
 				<ul class="listing-nav">
-					<li><a href="#listing-overview" class="active">Description</a></li>
-					<li><a href="#listing-gallery">Gallerie</a></li>
+					<li><a href="#listing-overview" class="active">{{ 'Description'|trans }}</a></li>
+					<li><a href="#listing-gallery">{{ 'Gallerie'|trans }} </a></li>
 					
 				</ul>
 			</div>
@@ -89,7 +89,7 @@
 
 			{% if product.images is not empty %}
 				<div id="listing-gallery" class="listing-section">
-				<h3 class="listing-desc-headline margin-top-70">Gallerie</h3>
+				<h3 class="listing-desc-headline margin-top-70">{{ 'Gallerie'|trans }}</h3>
 				<div class="listing-slider-small mfp-gallery-container margin-bottom-0">
 					{% for img in product.images %}
 						<a href="{{ asset('images_products/'~img.name) }}" data-background-image="{{ asset('images_products/'~img.name) }}" class="item mfp-gallery" ></a>
@@ -115,14 +115,14 @@
 		================================================== -->
 		<div class="col-lg-4 col-md-4 margin-top-75 sticky">
 
-			<div class="verified-badge with-tip" data-tip-content="Montant total pour le nombre de jours ou heures">
+			<div class="verified-badge with-tip" data-tip-content="{{ 'Montant Total' |trans }}">
 				{{'Total'| trans }}: &nbsp <span id="amount">{{ product.priceUnit }} </span> &euro;
 			</div>
 
 			
 			<!-- Book Now -->
 			<div class="boxed-widget booking-widget margin-top-35">
-				<h3><i class="fa fa-calendar-check-o "></i> Réservation</h3>
+				<h3><i class="fa fa-calendar-check-o "></i> {{ 'Réservation'| trans }} </h3>
 				{{ render(controller('AppBundle:Reservation:new',{ 'productId': product.id } )) }}
 
 			</div>
@@ -131,15 +131,15 @@
 			<!-- Opening Hours -->
 			<div class="boxed-widget opening-hours margin-top-35">
 				
-				<h3><i class="sl sl-icon-clock"></i> Obligatoire</h3>
+				<h3><i class="sl sl-icon-clock"></i> {{ 'Obligatoire'|trans }}</h3>
 				<ul>
 					{% if product.productType.code == "CAR" %}
-						<li>Permis<span> Obligatoire</span></li>
-						<li>Age <span> +18 ans</span></li>
+						<li>{{ 'Permis de conduire'|trans }}<span> {{ 'Obligatoire'|trans }}</span></li>
+						<li>{{ 'Age'|trans }} <span> {{'+18 ans'|trans }} </span></li>
 						
 					
 					{% endif %}
-						<li>règlements Kaligana et du logement<span> <a href="#" target="blank">voir</a></span></li>
+						<li>{{ 'Règlements Kaligana et du logement'|trans }}<span> <a href="#" target="blank">{{ 'Voir'|trans }}</a></span></li>
 					
 					
 					
@@ -288,10 +288,6 @@
              });
             
         })
-        .fail(function (data) {
-            alert('error');
- 
-        });
     });
 </script>
 

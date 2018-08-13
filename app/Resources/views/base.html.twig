@@ -114,8 +114,8 @@
                     <ul id="responsive">
 
                         <li><a href="{{ path('homepage') }}">  {{ 'Accueil' | trans }} </a></li>
-                        <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous?' | trans }} </a></li>
-                        <li><a href="#"> Nos services </a>
+                        <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous ?' | trans }} </a></li>
+                        <li><a href="#"> {{ 'Nos services' | trans }} </a>
                         <ul>
                             <li><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"> {{ 'Logements' | trans }} </a></li>
                             <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
@@ -152,15 +152,15 @@
                 <div class="header-widget">
                     {% if is_granted('ROLE_ADMIN') %}
                     
-                    <a href="{{ path('fos_user_security_logout') }}" class="sign-in"><i class="sl sl-icon-login"></i> se déconnecter</a>
+                    <a href="{{ path('fos_user_security_logout') }}" class="sign-in"><i class="sl sl-icon-login"></i>{{ 'Se déconnecter'|trans }} </a>
                     
                     {% endif %}
                     
                      {% if app.session.get('reservations') is null %}
-                     <a href="#" onclick="return false;" class="button border with-icon">Mes Réservations
+                     <a href="#" onclick="return false;" class="button border with-icon">{{ 'Mes réservations'|trans }}
                      <i class="sl sl-icon-plus"></i>
                      {% else %}
-                       <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">Mes Réservations
+                       <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">{{ 'Mes réservations'|trans }}
                       ( {{ app.session.get('reservations') | length }} )
                      {% endif %}
                      </a>
@@ -191,19 +191,19 @@
             <div class="col-md-5 col-sm-6">
                 <img class="footer-logo" src="{{ asset('images/logo.png') }}" alt="">
                 <br><br>
-                <p>Retrouvez nos derniers articles sur <a href="#"> <u> Kaligana blog </u>  </a> .<br/>
-                Reçevez régulièrement les news de Kaligana en vous inscrivant à notre newsletter.</p>
+                <p>{{ 'Retrouvez nos derniers articles sur'|trans }} <a href="#"> <u> {{ 'Kaligana blog' | trans }} </u>  </a> .<br/>
+                {{ 'Reçevez régulièrement les news de Kaligana en vous inscrivant à notre newsletter' | trans }}.</p>
                 {{ render(controller('AppBundle:Default:newsletter')) }} <br/>
             </div>
 
             <div class="col-md-4 col-sm-6 ">
-                <h4>Liens utiles</h4>
+                <h4>{{ 'Liens utiles'|trans }}</h4>
                 
 
                 <ul class="footer-links">
-                    <li><a href="#">Qui sommes-nous ?</a></li>
-                    <li><a href="#">Nos conditions générales de vente</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">{{ 'Qui sommes-nous ?' | trans }}</a></li>
+                    <li><a href="#">{{ 'Nos conditions générales de vente' | trans }}</a></li>
+                    <li><a href="#">{{ 'Mentions légales'|trans }}</a></li>
                     <li><a href="#">FAQ</a></li>
 
                 </ul>
@@ -211,10 +211,10 @@
             </div>      
 
             <div class="col-md-3  col-sm-12">
-                <h4>Contactez Nous</h4>
+                <h4>{{ 'Contactez Nous' | trans }} </h4>
                 <div class="text-widget">
                     <span>4 rue du port , 33000 BORDEAUX</span> <br>
-                    Phone: <span>(+33)6 45 35 89 </span><br>
+                    {{'Téléphone'|trans }} : <span>(+33)6 45 35 89 </span><br>
                     E-Mail:<span> <a href="#" onclick="return false;">kaligana@example.com</a> </span><br>
                 </div>
 
@@ -231,6 +231,19 @@
         
         <!-- Copyright -->
         <div class="row">
+            <div class="col-md-12">
+                {% set currentPath = app.request.attributes.get('_route') %}
+                {% set routeParams = app.request.get('_route_params') %}
+                {% if app.request.locale == 'fr' %}
+                    {%set routeParams = routeParams|merge({'_locale': 'en'}) %}
+                    Français(France) &nbsp
+                    <a href="{{ path(currentPath, routeParams) }} ">English(US)</a>
+                {% else %}
+                    {%set routeParams = routeParams|merge({'_locale': 'fr'}) %}
+                    <a href="{{ path(currentPath, routeParams) }}">Français(France)</a> &nbsp
+                    English(US)
+                {% endif %}
+            </div>
             <div class="col-md-12">
                 <div class="copyrights">© 2018 All Rights Reserved.</div>
             </div>
@@ -285,12 +298,15 @@
             data: $(this).serialize()
         })
         .done(function (data) {
-            swal("Félicitations!", "Vous êtes maintenant enregistré à la newsletter!", "success");
+            var title = "{{ 'Félicitations!' | trans }}" ;
+            var message = "{{ 'Vous êtes maintenant enregistré à la newsletter!' | trans }}" ;
+            swal(title, message, "success");
             $( "#news" ).hide();
             
         })
         .fail(function (data) {
-            swal("Ouch!", "Une erreur est survenu, vous êtes peut-être déjà enregistré", "error");
+            var message = "{{ 'Une erreur est survenu, vous êtes peut-être déjà enregistré? Sinon réessayez.' | trans }}" ;
+            swal("Ouch!", message, "error");
  
         });
     });
