@@ -1,0 +1,36 @@
+<div class="container" style="background-color: white;color: black;">
+  <h3> Réservation(s) </h3>
+  <h5>Client : &nbsp {{invoice.customerLastName}} &nbsp {{invoice.customerFirstName}}</h5>
+  <h5>Code: {{ invoice.code }} </h5>
+
+  
+
+  <br/><br/>
+         
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Service</th>
+      	<th> Nom </th>
+        <th>Date de début</th>
+        <th>Date de fin</th>
+        
+      </tr>
+    </thead>
+    <tbody id="myTable">
+    {% for resa in invoice.reservations %}
+    
+      <tr>
+        <td > {{ resa.product.productType.name }} </td>
+        <td> {{resa.product.name }} </td>
+        <td>{{ resa.dateBegin | date('d/m/Y') }}</td>
+        <td> {{ resa.dateEnd | date('d/m/Y') }} </td>
+        
+      </tr>
+      
+    {% endfor %}
+      
+    </tbody>
+  </table>
+  <br/><br/><br/>
+</div>

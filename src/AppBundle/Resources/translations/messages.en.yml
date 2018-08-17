@@ -2,16 +2,24 @@
 Bienvenue: Welcome
 Accueil: Home
 Voitures: Cars
+Voiture: Car
 Service: Service
 Date: Date
 Agence: Agency 
 Client: Customer
 Code: Code
+2 Personnes: 2 Persons
+3 Personnes: 3 Persons
+4 Personnes: 4 Persons
+5 Personnes: 5 Persons
+6 Personnes: 6 Persons 
 
 
 Prix: Price
 Logements: Lodgments
+Logement: Lodgment
 Activités: Activities
+Activité: Activity
 Locations de logements saisonniers: Seasonal housing rentals
 Locations de voitures: Car Rentals
 Activités touristiques: Tourist Activities
@@ -61,7 +69,8 @@ Félicitations!: Congrats!
 Autres services: Other services
 
 Votre réservation a bien été prise en compte!: Your reservation has been taken into account!
-Gallerie: Gallery 
+Gallerie: Gallery
+Catégorie: Category 
 Obligatoire: Mandatory
 jour: day
 Choisir un jour: Choose a day

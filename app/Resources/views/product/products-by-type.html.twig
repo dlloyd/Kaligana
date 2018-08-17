@@ -64,7 +64,11 @@
 										
 										<h3>{{ product.name }} </h3>
 										<span class="tag" style="font-size: 93%;">{{ product.priceUnit }} &euro;</span><br/>
-										<span>{{ product.description | slice(0,50) }}...</span>
+										<span>
+										{% if product.category != null %}
+											{{ product.category.name | trans }}
+										{% endif %}
+										</span>
 									</div>
 									<span class="like-icon"></span>
 									

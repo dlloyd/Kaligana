@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+        <h2><i class="sl sl-icon-list"></i> Liste des factures</h2>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Content
+================================================== -->
+
+
+<!-- Container -->
+
+
+<div class="container">
+  <h3> liste des factures  </h3>
+
+  
+
+  <br/><br/>
+  <div class="row">
+  <div class="col-md-6">
+  <input id="myInput" type="text" name="search" placeholder="Recherche" />
+  </div>
+  </div>
+  <br/><br/><br/>        
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Code</th>
+      	<th> Nom </th>
+        <th>Prénom</th>
+        <th>Date de réservation</th>
+        <th> Voir réservation(s) </th>
+        
+      </tr>
+    </thead>
+    <tbody id="myTable">
+    {% for invoice in invoices %}
+    
+      <tr>
+        <td > {{ invoice.code }} </td>
+        <td> {{invoice.customerLastName }} </td>
+        <td>{{invoice.customerFirstName }}</td>
+        <td> {{ invoice.date | date('d/m/Y') }} </td>
+        <td> <a class="simple-ajax-popup-align-top" href=" {{ path('show_invoice_reservations',{'id': invoice.id }) }} "><i class="fa fa-eye fa-2x"></i> </a> </td>
+        
+      </tr>
+      
+    {% endfor %}
+      
+    </tbody>
+  </table>
+  <br/><br/><br/>
+</div>
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('magnific-popup/jquery.magnific-popup.js') }}"></script>
+
+  <script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function(){
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").each(function(){
+     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    });
+
+
+    $('.simple-ajax-popup-align-top').magnificPopup({
+        type: 'ajax',
+        alignTop: true,
+        overflowY: 'scroll' 
+      });
+
+    
+  });
+</script>
+
+
+
+
+{% endblock %}
+
+
+{% endblock %}

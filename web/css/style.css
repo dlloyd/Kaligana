@@ -14129,7 +14129,14 @@ img.mfp-img {
 padding: 20px;
 background-color: #f44336; /* Red */
 color: white;
-margin-bottom: 15px;
+margin-bottom: 15px; 
+}
+
+.alert-notice {
+padding: 20px;
+background-color: #52FF33; 
+color: white;
+margin-bottom: 15px; 
 }
 
 /* The close button */

@@ -152,7 +152,8 @@ class ProductController extends Controller
     public function updateProductAction(Request $req,$id){
     	$em = $this->getDoctrine()->getManager();
     	$prod = $em->getRepository('AppBundle:Product')->find($id);
-    	$form = $this->createForm(ProductType::class, $prod);
+        $categories = $em->getRepository('AppBundle:ProductCategory')->findBy(array('code'=>$prod->getProductType()->getCode()));
+    	$form = $this->createForm(ProductType::class, $prod,array('categories' =>$categories ));
 
     	$form->HandleRequest($req);
     	if($form->isSubmitted() && $form->isValid()){
@@ -160,7 +161,7 @@ class ProductController extends Controller
            $em->merge($prod);
            $em->flush();
            $req->getSession()->getFlashBag()->add('notice','Produit mis à jour');
-           return $this->redirectToRoute('add_product_image',array('id'=>$id));
+           return $this->redirectToRoute('show_all_products');
         }
 
         return $this->render('product/update.html.twig', array(
@@ -185,7 +186,7 @@ class ProductController extends Controller
                     'entry_options' => array('label' => false),
                     'allow_add' => true,
                 ))
-            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
+            ->add('save', SubmitType::class, array('disabled'=>true,'label' => 'Enregistrer'))
             ->getForm();
 
         $form->HandleRequest($req);

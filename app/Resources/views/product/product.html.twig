@@ -77,6 +77,10 @@
 
 				<!-- Description -->
 
+				{% if product.category != null %}
+					{{ 'Catégorie' | trans }} &nbsp  : &nbsp {{ product.category.name | trans }} <br/><br/>
+				{% endif %}
+
 				<p>
 					{{ product.description }}
 				</p>

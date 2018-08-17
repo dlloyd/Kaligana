@@ -50,7 +50,8 @@
     <thead>
       <tr>
       	<th> Nom </th>
-        <th> Categorie </th>
+        <th>Service</th>
+        <th> Catégorie </th>
         <th> Prix </th>
         <th>  Image(s) </th>
         <th> Mettre à jour </th>
@@ -63,10 +64,15 @@
       <tr>
         <td class="name"> {{ product.name }} </td>
         <td> {{ product.productType.name }} </td>
+        <td>
+          {% if product.category != null %}
+            {{ product.category.name }}
+          {% endif %}
+        </td>
         <td> {{ product.priceUnit }} </td>
-        <td> <a href=" {{ path('add_product_image',{'id': product.id }) }} "> ici</a> </td>
-        <td > <a href=" {{ path('update_product',{'id': product.id }) }} " > ici</a> </td>
-        <td > <a href=" {{ path('delete_product',{'id': product.id}) }} " onclick="validate(event)"> ici</a> </td>
+        <td> <a href=" {{ path('add_product_image',{'id': product.id }) }} "><i class="fa fa-image fa-2x"></i> </a> </td>
+        <td > <a href=" {{ path('update_product',{'id': product.id }) }} " ><i class="fa fa-pencil-square-o fa-2x"></i> </a> </td>
+        <td > <a href=" {{ path('delete_product',{'id': product.id}) }} " onclick="validate(event)"> <i class="fa fa-trash-o fa-2x"></i></a> </td>
         
       </tr>
       {% endif %}

@@ -175,27 +175,26 @@ class ReservationController extends Controller
     }
 
     /**
-     * @Route("/admin/show/reservations/", name="show_all_reservations")
+     * @Route("/admin/show/invoices/", name="show_all_invoices")
      */
-    public function showAllAction(Request $req){
+    public function showAllInvoicesAction(Request $req){
 
     	$em = $this->getDoctrine()->getManager();
-    	$reservations = $em->getRepository('AppBundle:Reservation')->findAll();
-    	return $this->render('reservation/reservations.html.twig', array('reservations' => $reservations ));
+    	$invoices = $em->getRepository('AppBundle:Invoice')->findAll();
+    	return $this->render('reservation/invoices.html.twig', array('invoices' => $invoices ));
     }
 
     /**
-     * @Route("/admin/show/inv/{code}", name="show_invoice_by_code")
+     * @Route("/admin/show/inv/{id}",requirements={"id" = "\d+"}, name="show_invoice_reservations")
      */
-    public function showInvoiceByCodeAction($code){
+    public function showInvoiceByIdAction($id){
     	$em = $this->getDoctrine()->getManager();
-    	$res = $em->getRepository('AppBundle:Invoice')->findBy(['code' => $code]);
-    	if($res){
-    		return $this->render('reservation/invoice.html.twig', array('invoice' => $res )); 
+    	$inv = $em->getRepository('AppBundle:Invoice')->find($id);
+    	if(!$inv){
+           throw $this->createNotFoundException('Erreur facture introuvable'); 
     	}
 
-    	$request->getSession()->getFlashBag()->add('error','Code facture inexistant');
-        return $this->redirectToRoute('show_all_reservations');
+        return $this->render('reservation/invoice.html.twig', array('invoice' => $inv ));
     }
 
     /**

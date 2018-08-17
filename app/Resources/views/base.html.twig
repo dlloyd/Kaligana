@@ -65,14 +65,15 @@
 <body>
    
     {% for message in app.flashes('notice') %}
-        <div class="alert alert-notice">
+        <div class="alert-notice">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
             {{ message }}
         </div>
     {% endfor %}
 
     {% for label, messages in app.flashes(['warning', 'error']) %}
         {% for message in messages %}
-            <div class="alert ">
+            <div class="alert">
                 <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
                 {{ message }}
             </div>
@@ -112,29 +113,33 @@
                 <!-- Main Navigation -->
                 <nav id="navigation" class="style-1">
                     <ul id="responsive">
-
+                        
                         <li><a href="{{ path('homepage') }}">  {{ 'Accueil' | trans }} </a></li>
-                        <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous ?' | trans }} </a></li>
-                        <li><a href="#"> {{ 'Nos services' | trans }} </a>
-                        <ul>
-                            <li><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"> {{ 'Logements' | trans }} </a></li>
-                            <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
+
+                        {% if not is_granted('ROLE_ADMIN') or not is_granted('ROLE_SUPER_ADMIN') %}
+                            <li><a href="{{ path('about_us') }}">  {{ 'Qui sommes-nous ?' | trans }} </a></li>
+                            <li><a href="#"> {{ 'Nos services' | trans }} </a>
+                            <ul>
+                                <li><a href="{{ path('products_by_type',{'code':'LOD','page':1}) }}"> {{ 'Logements' | trans }} </a></li>
+                                <li><a href="{{ path('products_by_type',{'code':'CAR','page':1}) }}">  {{ 'Voitures' | trans }} </a></li>
+                                
+                            </ul>
+                            </li>
+                            <li><a href="#">  {{ 'Blog' | trans }} </a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="#">Administrateur Panel</a>
+                            <ul>
+                        
+                             <li><a href="{{ path('add_product',{'typeCode':'LOD'}) }}">ajouter logement</a> </li>
+                             <li><a href="{{ path('add_product',{'typeCode':'CAR'}) }}">ajouter voiture</a> </li>
+                            <li> <a href="{{ path('show_all_invoices') }}">liste des factures</a> </li>
+                             <li><a href="{{ path('show_all_products') }}">liste des produits</a></li>
                             
-                        </ul>
-                        </li>
-                        <li><a href="#">  {{ 'Blog' | trans }} </a></li>
-                {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="#">Administrateur Panel</a>
-                    <ul>
-                
-                     <li><a href="{{ path('add_product',{'typeCode':'LOD'}) }}">ajouter logement</a> </li>
-                     <li><a href="{{ path('add_product',{'typeCode':'CAR'}) }}">ajouter voiture</a> </li>
-                    <li> <a href="{{ path('show_all_reservations') }}">liste des réservations</a> </li>
-                     <li><a href="{{ path('show_all_products') }}">liste des produits</a></li>
-                    
-                    
-                    
-                {% endif %}
+                            
+                            
+                        {% endif %}
                     </ul>
 
                         
@@ -156,14 +161,16 @@
                     
                     {% endif %}
                     
-                     {% if app.session.get('reservations') is null %}
-                     <a href="#" onclick="return false;" class="button border with-icon">{{ 'Mes réservations'|trans }}
-                     <i class="sl sl-icon-plus"></i>
-                     {% else %}
-                       <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">{{ 'Mes réservations'|trans }}
-                      ( {{ app.session.get('reservations') | length }} )
-                     {% endif %}
+                    {% if not is_granted('ROLE_ADMIN') or not is_granted('ROLE_SUPER_ADMIN') %}
+                         {% if app.session.get('reservations') is null %}
+                         <a href="#" onclick="return false;" class="button border with-icon">{{ 'Mes réservations'|trans }}
+                         <i class="sl sl-icon-plus"></i>
+                         {% else %}
+                           <a href="{{ path('validate_payment_reservation') }}" class="button border with-icon">{{ 'Mes réservations'|trans }}
+                          ( {{ app.session.get('reservations') | length }} )
+                         {% endif %}
                      </a>
+                    {% endif %}
                 </div>
             </div>
             <!-- Right Side Content / End -->

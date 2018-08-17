@@ -54,12 +54,9 @@
 					
 					<li>{{ 'Produit' | trans }} <span>{{ product.name }}</span></li>
 					<li>{{ 'Type' | trans }} <span>{{ product.productType.name | trans }}</span></li>
-					<li> {{ 'Description' | trans }}  <span>{{ product.description | slice(0,50) }}...</span></li>
 					<li>{{ 'Prix Unitaire' | trans }}  <span>{{ product.priceUnit }} &euro; </span></li>
-					<li> Mettre à jour <span><a href="{{ path('update_product',{'id':product.id }) }}"> {{'lien'| trans }} </a></span></li>
-					
-		
-					
+					<li> Mettre à jour <span><a href="{{ path('update_product',{'id':product.id }) }}"> <i class="fa fa-pencil-square-o fa-2x"></i> </a></span></li>
+								
 				</ul>
 
 			</div>
@@ -118,6 +115,7 @@
 
 		    $addImgButton.on('click', function(e) {
 		        // add a new tag form (see next code block)
+		        $("#form_save").prop('disabled', false);
 		        addImgForm($collectionHolder, $newLinkLi);
 		    });
 	});
@@ -152,7 +150,7 @@
 	$("input[type=checkbox]").on("click",function(){
 		$("input[type=checkbox]").prop('checked',false);
 		$(this).prop('checked',true);
-	})
+	});
 
 </script>
 

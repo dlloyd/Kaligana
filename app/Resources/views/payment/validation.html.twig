@@ -127,7 +127,7 @@
 						{% endif %}
 						
 						<li >{{'Montant'|trans }} <span>{{ resaAmount[reservation.productId] }} &euro;</span></li>
-						<li> {{ 'Supprimer'|trans }} <span><a href="{{ path('remove_reservation_product',{'id': reservation.productId }) }}"> {{'ici'| trans }} </a></span></li>
+						<li> {{ 'Supprimer'|trans }} <span><a href="{{ path('remove_reservation_product',{'id': reservation.productId }) }}"> <i class="fa fa-trash-o fa-2x"></i> </a></span></li>
 						<div style="border-bottom: 1px solid rgba(0,0,0,0.09);"></div><br/>
 					
 
